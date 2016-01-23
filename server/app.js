@@ -22,10 +22,10 @@ app.post('/', function(req, res, next){
         res.status(200);
         res.send({});
 		res.end();
+		createFile(req.headers.filename,data);
     });
     // console.log(req.headers.filename);
     // console.log(data);
-    createFile(req.headers.filename,data)
 });
 
 function updatePrice(storeId, data){

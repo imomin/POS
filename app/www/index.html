@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+    <title></title>
+
+    <link href="lib/ionic/css/ionic.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+
+    <!-- IF using Sass (run gulp sass first), then uncomment below and remove the CSS includes above
+    <link href="css/ionic.app.css" rel="stylesheet">
+    -->
+
+    <!-- ionic/angularjs js -->
+    <script src="lib/ionic/js/ionic.bundle.js"></script>
+
+    <!-- cordova script (this will be a 404 during development) -->
+    <script src="lib/ngCordova/dist/ng-cordova.js"></script>
+    <script src="cordova.js"></script>
+    <!-- your app's js -->
+    <script src="js/app.js"></script>
+    <script src="js/controller/mainCtrl.js"></script>
+    <script src="js/controller/authCtrl.js"></script>
+    <script src="js/controller/homeCtrl.js"></script>
+    <script src="js/controller/userCtrl.js"></script>
+    <script src="js/service/userService.js"></script>
+  </head>
+  <body ng-app="pricecheck">
+    <ion-pane>
+      <!-- <ion-header-bar align-title="center" class="bar">
+        <h1 class="title" style="color:#147337;">Price Check</h1>
+      </ion-header-bar> -->
+      <ion-nav-view class="slide-left-right"></ion-nav-view>
+    </ion-pane>
+  </body>
+</html>
+
+
+
+<!-- 
+1) Check if it is connected to the server?
+2) Login Screen, Prompt for password.
+3) Option to scan.
+4) Option to add/edit information. (Have sticky department on the drop down.)
+5) Option to list/add/edit Department
+6) Featch production name/details from 3rd party DB.
+
+
+Process.
+On App Lauch show splash screen. During this point try to find access point.
+If not connected to access point Hide Splash screen and show message to connect to access point.
+
+If connected to access point, prompt to enter username/password. Validate and show invalid message if not connected.
+
+Once authenticated. Shows Store Name and message connected with button to 
+scan item and view department lists.
+
+In Department list, the list will come from the server and cache on the phone. A department's name can be edit and save or new department can be added and pushed back.
+
+On scan, item will be looked up on the server and to pull back item name, desc, department and price. It will be combo 
+search in existing database or 3rd party barcode record. On save data will be sync. (User may not know if it is a 
+new or existing item since we are featching and populating data using 3rd party.).
+
+Admin can add/edit users with username and password.
+ -->

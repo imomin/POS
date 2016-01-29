@@ -1,0 +1,48 @@
+<ion-view view-title="Home"  class="">
+  <ion-content class="">
+    <div class="row center">
+      <div class="col center">
+        Enter the Employee Code
+      </div>
+    </div>
+  </ion-content>  
+  <div class="stickyFooter">
+      <div class="row">
+        <div class="col">
+          <ion-list>
+            <ion-item ng-click="scan()">
+              <i class="ion-ios-barcode-outline" style="font-size: 70px;color: darkturquoise;"></i>
+              <br><span style="color:#888888;">Scan Barcode<span>
+            </ion-item>
+          </ion-list>
+        </div>
+        <div class="col">
+          <ion-list>
+            <ion-item ng-click="showDepartments()">
+              <i class="ion-ios-list-outline" style="font-size: 70px;color: crimson;"></i>
+              <br><span style="color:#888888;">Departments<span>
+            </ion-item>
+          </ion-list>
+        </div>
+      </div>
+      <!-- For Admin Only -->
+      <div class="row" ng-show="1==1">
+        <div class="col">
+          <ion-list>
+            <ion-item ng-click="showUsers()">
+              <i class="ion-ios-people-outline" style="font-size: 70px;color: rosybrown;"></i>
+              <br><span style="color:#888888;">Users<span>
+            </ion-item>
+          </ion-list>
+        </div>
+        <div class="col">
+          <ion-list>
+            <ion-item ng-click="showPromotions()">
+              <i class="ion-ios-pricetags-outline" style="font-size: 70px;color: salmon;"></i>
+              <br><span style="color:#888888;">Promotons<span>
+            </ion-item>
+          </ion-list>
+        </div>
+    </div>
+  </div>
+</ion-view>

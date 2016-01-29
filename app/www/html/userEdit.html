@@ -1,0 +1,28 @@
+<div class="modal">
+  	<form name="form" novalidate>
+	  <ion-header-bar align-title="center" class="">
+		<button class="button button-icon icon ion-ios-arrow-back" ng-click="closeModal('editUser')"></button>
+	   	<h1 class="title">User</h1>
+	  </ion-header-bar>
+	  <ion-content>
+		<label class="item item-input">
+			<input type="text" name="name" ng-model="thisUser.name" placeholder="First Name" required="true">
+			<i ng-show="form.name.$error.required" class="icon ion-alert-circled assertive col col-10"></i>
+		</label>
+		<ion-toggle ng-model="thisUser.admin">
+		Admin
+		</ion-toggle>
+		<label class="item item-input">
+			<input style="text-align: center;" type="text" ng-model="thisUser.code" placeholder="" ng-disabled="true">
+		</label>
+	  </ion-content>
+		<div class="stickyFooter">
+			<button ng-show="thisUser.id" style="" ng-click="getAccessCode()" class="button button-full button-calm">Get Access Code</button>
+			<button ng-show="thisUser.id" style="" ng-click="deleteUser()" class="button button-full button-assertive">Remove</button>
+			<button style="margin: 0" ng-click="updateUser()" ng-disabled="form.$invalid" class="button button-full button-balanced">Done</button>
+		</div>
+	  <!-- <ion-footer-bar style="">
+	      <button style="margin: 0" ng-click="updateUser()" ng-disabled="form.$invalid" class="button button-full button-balanced">Done</button>
+	  </ion-footer-bar> -->
+	</form>
+</div>

@@ -1,0 +1,109 @@
+<div class="modal">
+  <ion-header-bar>
+    <h1 class="title">Promotions List</h1>
+  </ion-header-bar>
+  <ion-content>
+    <div class="list">
+      
+    </div>
+    <button class="button button-full button-energized" ng-click="closeModal('promo')">Done</button>
+  </ion-content>
+</div>
+
+
+
+    <ion-pane ng-controller="HomeCtrl">
+      <ion-header-bar align-title="center" class="bar">
+        <h1 class="title" style="color:#147337;">Price Check</h1>
+      </ion-header-bar>
+      <ion-content has-header="true" padding="true" class="" padding="true" scroll="false">
+
+      <!-- Step 1 -->
+      <!-- Searching for the Server... -->
+      <div class="row row-center" ng-show="!isConnected">
+        <div class="col col-center">
+          Searching for network.
+        </div>
+      </div>
+
+      <!-- Step 2 -->
+      Connected to West Oak Food Mart.
+        
+      <!-- Step 3 -->
+        <!-- 
+          POSCode:858176002003
+          MerchandiseCode:1
+          RegularSellPrice:$22.22
+          Description:"name"
+          "PLU GROUP CODE, must increment"
+          <ItemID>001</ItemID>
+          SellingUnits:1
+         -->
+<!--         <div class="list">
+          <label class="item item-input item-floating-label">
+            <span class="input-label">Department</span>
+            <span class="center">SELECT DEPARTMENT</span>
+          </label>
+          <label class="item item-floating-label">
+            <span class="input-label">Item Name</span>
+            <span class="center">123123123231</span>
+          </label>
+          <label class="item item-input item-floating-label">
+            <span class="input-label">Description</span>
+            <input type="text" placeholder="Email">
+          </label>
+          <label class="item item-input item-floating-label">
+            <span class="input-label">Price</span>
+            <input type="text" placeholder="Email">
+          </label>
+        </div> -->
+        
+<!--         <ion-scroll style="background-color:#ddd;"> -->
+        <div ng-show="isAuthenticated">
+          <div class="row row-center">
+            <div class="col col-center">
+              Content to go above the form {{deviceId}}.
+            </div>
+          </div>
+          <div class="stickyFooter">
+            <div class="row">
+              <div class="col">
+                <ion-list>
+                  <ion-item ng-click="scan()">
+                    <i class="ion-ios-barcode-outline" style="font-size: 70px;"></i>
+                    <br>Scan Barcode
+                  </ion-item>
+                </ion-list>
+              </div>
+              <div class="col">
+                <ion-list>
+                  <ion-item ng-click="showDepartments()">
+                    <i class="ion-ios-list-outline" style="font-size: 70px;"></i>
+                    <br>Departments
+                  </ion-item>
+                </ion-list>
+              </div>
+            </div>
+            <!-- For Admin Only -->
+            <div class="row" ng-show="1==1">
+              <div class="col">
+                <ion-list>
+                  <ion-item ng-click="showUsers()">
+                    <i class="ion-ios-people-outline" style="font-size: 70px;"></i>
+                    <br>Users
+                  </ion-item>
+                </ion-list>
+              </div>
+              <div class="col">
+                <ion-list>
+                  <ion-item ng-click="showPromotions()">
+                    <i class="ion-ios-pricetags-outline" style="font-size: 70px;"></i>
+                    <br>Promotons
+                  </ion-item>
+                </ion-list>
+              </div>
+          </div>
+        </div>        
+        <!-- </ion-scroll> -->
+      </ion-content>
+    </ion-pane>

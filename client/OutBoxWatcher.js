@@ -1,4 +1,16 @@
 "use strict";
+
+/* USAGE
+  var OutBoxWatcher = require('./OutBoxWatcher');
+  var outBoxWatcher = new OutBoxWatcher({
+   storeId:'client1234',
+     serverURL:'http://localhost:3005',
+     boOutBoxPath:'./outBox'
+  });
+ outBoxWatcher.start();
+*/
+
+
 var chokidar = require('chokidar');
 var request = require('request');
 var fs = require('fs');
@@ -42,6 +54,7 @@ _watcher = chokidar.watch('file, dir', {
   ignored: /[\/\\]\./, 
   persistent: true
 });
+//usePolling:true
 
 //Handle Socket Code
 var storeSocket = io.connect(_options.serverURL);

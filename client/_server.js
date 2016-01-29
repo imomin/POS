@@ -1,3 +1,17 @@
+//this is a simple server file to post data from client to server.
+/*
+{
+  "name": "POS Server",
+  "version": "0.0.0",
+  "main": "",
+  "dependencies": {
+    "express": "^4.13.3",
+    "socket.io": "^1.4.4"
+  },
+  "scripts": {},
+  "private": true
+}
+*/
 var express = require('express');  
 var app = express();  
 var server = require('http').createServer(app);  

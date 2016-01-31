@@ -1,0 +1,41 @@
+<div class="modal">
+    <form name="form" novalidate>
+    <ion-header-bar align-title="center" class="">
+    <button class="button button-icon icon ion-ios-arrow-back" ng-click="closeModal('item')"></button>
+      <h1 class="title">Item</h1>
+    </ion-header-bar>
+    <ion-content>
+      <div class="item item-input">
+        <span class="input-label light-lable">Code</span>
+        {{thisItem.POSCode}}
+      </div>
+      <div class="item  item-input" ng-click="selectDepartment()">
+        <span class="input-label light-lable">Department</span>
+        <div class="">{{thisItem.department.name}}</div>
+      </div>
+      <label class="item item-input">
+        <span class="input-label light-lable">Name</span>
+        <input type="text" name="name" ng-model="thisItem.Description" placeholder="Name" required="true" autocomplete="off">
+        <i ng-show="form.name.$error.required" class="icon ion-alert-circled assertive col col-10"></i>
+      </label>
+      <label class="item item-input">
+        <span class="input-label light-lable">Units</span>
+        <input min="1" type="number" name="unit" ng-model="thisItem.SellingUnits" placeholder="Units" required="true" autocomplete="off">
+        <i ng-show="form.name.$error.required" class="icon ion-alert-circled assertive col col-10"></i>
+      </label>
+      <label class="item item-input">
+        <span class="input-label light-lable">Price $</span>
+        <input min=".10" type="number" name="price" ng-model="thisItem.RegularSellPrice" placeholder="Price" required="true" autocomplete="off">
+        <i ng-show="form.name.$error.required" class="icon ion-alert-circled assertive col col-10"></i>
+      </label>
+    </ion-content>
+    <div class="hide-on-keyboard-open stickyFooter">
+      <button ng-show="thisItem.id" style="" ng-click="deleteItem(thisItem.POSCode)" class="button button-full button-assertive">Remove</button>
+      <button style="margin: 0" ng-click="setItemInfo()" ng-disabled="form.$invalid || !thisItem.department" class="button button-full button-balanced">Push Update</button>
+    </div>
+    <!-- <ion-footer-bar style="">
+        <button style="margin: 0" ng-click="updateUser()" ng-disabled="form.$invalid" class="button button-full button-balanced">Done</button>
+    </ion-footer-bar> -->
+  </form>
+</div>
+<!-- {"id":2,"POSCode":"","Description":"","SellingUnits":"1","RegularSellPrice":"1.79","ItemId":"001"}, -->

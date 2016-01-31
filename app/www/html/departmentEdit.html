@@ -1,0 +1,21 @@
+<div class="modal">
+  	<form name="form" novalidate>
+		<ion-header-bar align-title="center" class="">
+		<button class="button button-icon icon ion-ios-arrow-back" ng-click="closeModal('editDept')"></button>
+			<h1 class="title">Department</h1>
+		</ion-header-bar>
+		<ion-content>
+		<label class="item item-input">
+			<input type="text" name="name" ng-model="thisDept.name" placeholder="Name" required="true" autocomplete="off">
+			<i ng-show="form.name.$error.required" class="icon ion-alert-circled assertive col col-10"></i>
+		</label>
+		</ion-content>
+		<div class="hide-on-keyboard-open stickyFooter">
+			<button ng-show="thisDept.id" style="" ng-click="deleteDept()" class="button button-full button-assertive">Remove</button>
+			<button style="margin: 0" ng-click="updateDept()" ng-disabled="form.$invalid" class="button button-full button-balanced">Done</button>
+		</div>
+	  <!-- <ion-footer-bar style="">
+	      <button style="margin: 0" ng-click="updateUser()" ng-disabled="form.$invalid" class="button button-full button-balanced">Done</button>
+	  </ion-footer-bar> -->
+	</form>
+</div>

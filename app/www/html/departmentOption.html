@@ -1,0 +1,17 @@
+<div class="modal">
+  <ion-header-bar align-title="center" class="">
+    <button class="button button-icon icon ion-ios-arrow-back" ng-click="closeModal('deptOption')"></button>
+    <h1 class="title">Select Departments</h1>
+    <!-- cannot add on the fly because the department has to be created first. -->
+    <!-- <button class="button button-icon icon ion-ios-compose-outline" ng-click="addNewDepartment()"></button> -->
+  </ion-header-bar>
+  <ion-view>
+  <ion-content has-header="true" has-footer="true">
+      <ion-scroll direction="y" style="height:90vh;">
+          <ion-list>
+            <ion-radio ng-change="closeModal('deptOption');" ng-repeat="department in departments" ng-model="thisItem.department" ng-value="department">{{department.name}}</ion-radio>
+          </ion-list>
+      </ion-scroll>
+  </ion-content>
+  </ion-view>
+</div>

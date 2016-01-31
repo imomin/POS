@@ -21,6 +21,14 @@ div.modal-wrapper div ion-footer-bar {
     height: 55px !important;
 }
 
+ion-scroll[direction=y] {
+  height: 83vh;
+}
+
+.light-lable {
+    color:#B1B1B1;
+}
+
 .slide-in-right {
   -webkit-transform: translateX(100%);
     transform: translateX(100%); }

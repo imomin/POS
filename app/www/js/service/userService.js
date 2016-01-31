@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('pricecheck')
-	.factory('UserServ', function() {
+	.factory('UserServ', function($q) {
 	   var users = [{"id":1,"name":"Alex","admin":true,"code":""},
 					{"id":2,"name":"Mike","admin":false,"code":""},
 					{"id":3,"name":"Rick","admin":false,"code":""},
@@ -25,6 +25,16 @@ angular.module('pricecheck')
 			   }, 	
 			   	get:function(){
 	   				return users;
+	   			},
+	   			remove:function(id){
+	   				var defer = $q.defer();
+	   				angular.forEach(users, function(user, key){
+						if(id === user.id){
+							users.splice(key, 1);
+							defer.resolve(users);
+						}
+					});
+					return defer.promise;
 	   			}
 			};	   	
 

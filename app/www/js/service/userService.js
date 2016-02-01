@@ -1,40 +1,33 @@
 'use strict';
-
 angular.module('pricecheck')
-	.factory('UserServ', function($q) {
-	   var users = [{"id":1,"name":"Alex","admin":true,"code":""},
-					{"id":2,"name":"Mike","admin":false,"code":""},
-					{"id":3,"name":"Rick","admin":false,"code":""},
-					{"id":4,"name":"Sam","admin":true,"code":"8678"}];
-		var _id = 4;
+	.factory('UserServ', function($q, $http, $cookies, socket, serverAddr) {
+		var users = [];
 		return {
 				 set:function(user) {
-				   	if(user.id){
-						angular.forEach(users, function(value, key){
-							if(user.id === value.id){
-								users[key] = user;
-							}
-						});
-					}
-					else {
-						_id = _id+1;
-						user.id = _id;
-						users.push(user);
-					}
-					return users;
+				 	//$http.defaults.headers.post['X-XSRF-TOKEN'] = $cookies.get("XSRF-TOKEN");
+				 	if(user._id){
+				 		$http.put(serverAddr + '/api/things/'+user._id, user);
+				 	}
+				 	else {
+				 		$http.post(serverAddr + '/api/things/', user);
+				 	}
 			   }, 	
 			   	get:function(){
-	   				return users;
-	   			},
-	   			remove:function(id){
-	   				var defer = $q.defer();
-	   				angular.forEach(users, function(user, key){
-						if(id === user.id){
-							users.splice(key, 1);
-							defer.resolve(users);
-						}
+			   		var defer = $q.defer();
+   					$http.get(serverAddr + '/api/things').then(function(response){
+					  users = response.data;
+					  defer.resolve(users);
+					  socket.syncUpdates('thing', users);
+					}, function (err) {
+
 					});
-					return defer.promise;
+	   				return defer.promise;;
+	   			},
+	   			remove:function(_id){
+	   				$http.delete(serverAddr + '/api/things/' + _id);
+	   			},
+	   			distroySync:function(){
+	   				socket.unsyncUpdates('thing');
 	   			}
 			};	   	
 

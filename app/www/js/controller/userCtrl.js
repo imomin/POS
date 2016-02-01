@@ -2,7 +2,9 @@
 
 angular.module('pricecheck')
 .controller('UserCtrl', function($scope, $timeout, $ionicModal, $ionicPopup, UserServ) {
-	$scope.users = UserServ.get();
+	UserServ.get().then(function(data){
+		$scope.users = data;
+	});
 	$scope.thisUser = {};
 
 	$scope.openModal = function() {

@@ -3,8 +3,8 @@
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
-angular.module('pricecheck', ['ionic','ngCordova'])
-.constant('serverAddr','http://192.168.1.133:3006')
+angular.module('pricecheck', ['ionic','ngCordova','ngCookies','btford.socket-io'])
+.constant('serverAddr','http://192.168.1.133:9000')
 .factory('deviceId', function () {
     var _uuid = "";
     return {
@@ -12,7 +12,7 @@ angular.module('pricecheck', ['ionic','ngCordova'])
         setId: function(value) { _uuid = value;}
     };
 })
-.config(function($stateProvider, $urlRouterProvider) {
+.config(function($stateProvider, $urlRouterProvider, $httpProvider) {
     "use strict";
     $stateProvider           
         .state('connect', {name: 'connect', url: '/connect', templateUrl: 'html/connect.html', controller: 'MainCtrl'})
@@ -22,6 +22,7 @@ angular.module('pricecheck', ['ionic','ngCordova'])
     ;
     $urlRouterProvider.otherwise('/connect');
 })
+
 .run(function($rootScope,$ionicPlatform,$cordovaDevice,$cordovaSplashscreen,deviceId) {
   $ionicPlatform.ready(function() {
       //$cordovaSplashscreen.hide();

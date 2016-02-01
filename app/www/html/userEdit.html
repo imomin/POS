@@ -17,8 +17,8 @@
 		</label>
 	  </ion-content>
 		<div class="hide-on-keyboard-open stickyFooter">
-			<button ng-show="thisUser.id" style="" ng-click="getAccessCode()" class="button button-full button-calm">Get Access Code</button>
-			<button ng-show="thisUser.id" style="" ng-click="deleteUser()" class="button button-full button-assertive">Remove</button>
+			<button ng-show="thisUser._id" style="" ng-click="getAccessCode()" class="button button-full button-calm">Get Access Code</button>
+			<button ng-show="thisUser._id" style="" ng-click="deleteUser(thisUser._id)" class="button button-full button-assertive">Remove</button>
 			<button style="margin: 0" ng-click="updateUser()" ng-disabled="form.$invalid" class="button button-full button-balanced">Done</button>
 		</div>
 	  <!-- <ion-footer-bar style="">

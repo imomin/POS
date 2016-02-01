@@ -8,10 +8,10 @@
         <ion-item href="#" ng-click="showDetails(user);">
             {{user.name}}
             <span class="item-note">
-               {{user.admin ? "Admin" : "User"}}
+               {{user.role === 'admin' ? "Admin" : "User"}}
              </span>
-             <span ng-show="user.code" class="item-note">
-              ({{user.code}}) &nbsp;&nbsp;
+             <span ng-show="user.accessCode" class="item-note">
+              ({{user.accessCode}}) &nbsp;&nbsp;
              </span>
         </ion-item>
       </ion-list>

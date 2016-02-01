@@ -18,6 +18,7 @@ angular.module('pricecheck')
 
 	$scope.$on('$destroy', function() {
 		$scope.modal.remove();
+		UserServ.distroySync();
 	});
 
 	$scope.updateUser = function(){

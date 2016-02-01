@@ -6,6 +6,7 @@
 'use strict';
 import Thing from '../api/thing/thing.model';
 import User from '../api/user/user.model';
+import Employee from '../api/employee/employee.model';
 
 Thing.find({}).removeAsync()
   .then(() => {
@@ -73,5 +74,19 @@ User.find({}).removeAsync()
     })
     .then(() => {
       console.log('finished populating users');
+    });
+  });
+
+Employee.find({}).removeAsync()
+  .then(() => {
+      Employee.createAsync({
+        name: 'Alex',
+        role: 'admin'
+    }, {
+        name: 'Mike',
+        accessCode: '1231'
+    })
+    .then(() => {
+      console.log('finished populating employees');
     });
   });

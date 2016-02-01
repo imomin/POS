@@ -100,3 +100,19 @@ export function destroy(req, res) {
     .then(removeEntity(res))
     .catch(handleError(res));
 }
+
+/**
+ * Get my info
+ */
+export function me(req, res, next) {
+  var deviceId = req.employee._id;
+
+  Employee.findOneAsync({ deviceId: deviceId })
+    .then(employee => {
+      if (!employee) {
+        return res.status(401).end();
+      }
+      res.json(employee);
+    })
+    .catch(err => next(err));
+}

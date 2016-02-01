@@ -9,11 +9,11 @@
 			<input type="text" name="name" ng-model="thisUser.name" placeholder="First Name" required="true" autocomplete="off">
 			<i ng-show="form.name.$error.required" class="icon ion-alert-circled assertive col col-10"></i>
 		</label>
-		<ion-toggle ng-model="thisUser.admin">
+		<ion-toggle ion-toggle-text ng-model="thisUser.role" ng-true-value="'admin'" ng-false-value="'user'">
 		Admin
 		</ion-toggle>
 		<label class="item item-input">
-			<input style="text-align: center;" type="text" ng-model="thisUser.code" placeholder="" ng-disabled="true" autocomplete="off">
+			<input style="text-align: center;" type="text" ng-model="thisUser.accessCode" placeholder="" ng-disabled="true" autocomplete="off">
 		</label>
 	  </ion-content>
 		<div class="hide-on-keyboard-open stickyFooter">

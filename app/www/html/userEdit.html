@@ -9,7 +9,7 @@
 			<input type="text" name="name" ng-model="thisUser.name" placeholder="First Name" required="true" autocomplete="off">
 			<i ng-show="form.name.$error.required" class="icon ion-alert-circled assertive col col-10"></i>
 		</label>
-		<ion-toggle ion-toggle-text ng-model="thisUser.role" ng-true-value="'admin'" ng-false-value="'user'">
+		<ion-toggle ng-model="thisUser.role" ng-true-value="'admin'" ng-false-value="'user'">
 		Admin
 		</ion-toggle>
 		<label class="item item-input">
@@ -17,7 +17,7 @@
 		</label>
 	  </ion-content>
 		<div class="hide-on-keyboard-open stickyFooter">
-			<button ng-show="thisUser._id" style="" ng-click="getAccessCode()" class="button button-full button-calm">Get Access Code</button>
+			<button ng-show="1===2" style="" ng-click="getAccessCode()" class="button button-full button-calm">Get Access Code</button>
 			<button ng-show="thisUser._id" style="" ng-click="deleteUser(thisUser._id)" class="button button-full button-assertive">Remove</button>
 			<button style="margin: 0" ng-click="updateUser()" ng-disabled="form.$invalid" class="button button-full button-balanced">Done</button>
 		</div>

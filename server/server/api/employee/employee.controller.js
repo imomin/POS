@@ -76,7 +76,9 @@ export function show(req, res) {
 
 // Creates a new Employee in the DB
 export function create(req, res) {
-  Employee.createAsync(req.body)
+  var newEmployee = new Employee(req.body);
+  newEmployee.accessCode = newEmployee.generateAccessCode();
+  Employee.createAsync(newEmployee)
     .then(responseWithResult(res, 201))
     .catch(handleError(res));
 }
@@ -104,15 +106,32 @@ export function destroy(req, res) {
 /**
  * Get my info
  */
-export function me(req, res, next) {
-  var deviceId = req.employee._id;
+export function validateAccess(req, res, next) {
+  var deviceId = req.query.deviceId;
+  var accessCode = req.params.accesscode;
+  Employee.findOneAsync({ accessCode: accessCode })
+    .then(employee => {
+        if(!employee){
+          return res.status(404).end();
+        }
+        employee.accessCode = null;
+        employee.deviceId = deviceId;
+        employee.saveAsync().then(() => {
+          res.status(204).end();
+        })
+        .catch(handleError(res));
+      })
+    .catch(handleError(res));
+}
 
-  Employee.findOneAsync({ deviceId: deviceId })
+export function getUserByDeviceId(req, res, next) {
+  var deviceId = req.params.deviceid;
+  Employee.findOneAsync({deviceId: deviceId})
     .then(employee => {
       if (!employee) {
         return res.status(401).end();
       }
-      res.json(employee);
+      res.status(204).end();
     })
     .catch(err => next(err));
 }

@@ -21,13 +21,22 @@ angular.module('pricecheck')
 					}, function (err) {
 
 					});
-	   				return defer.promise;;
+	   				return defer.promise;
 	   			},
 	   			remove:function(_id){
 	   				$http.delete(serverAddr + '/api/employees/' + _id);
 	   			},
 	   			distroySync:function(){
 	   				socket.unsyncUpdates('employee');
+	   			},
+	   			validateAccessCode:function(accessCode){
+	   				var defer = $q.defer();
+   					$http.get(serverAddr + '/api/employees').then(function(response){
+					  debugger;
+					}, function (err) {
+						debugger;
+					});
+	   				return defer.promise;
 	   			}
 			};	   	
 

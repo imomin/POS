@@ -4,8 +4,8 @@
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 angular.module('pricecheck', ['ionic','ngCordova','ngCookies','btford.socket-io'])
-.constant('serverAddr','http://192.168.1.133:9000')
-.factory('deviceId', function () {
+.constant('serverAddr','http://10.248.30.228:9000')
+.factory('deviceInfo', function () {
     var _uuid = "";
     return {
         getId: function () { return _uuid; },
@@ -23,10 +23,10 @@ angular.module('pricecheck', ['ionic','ngCordova','ngCookies','btford.socket-io'
     $urlRouterProvider.otherwise('/connect');
 })
 
-.run(function($rootScope,$ionicPlatform,$cordovaDevice,$cordovaSplashscreen,deviceId) {
+.run(function($rootScope,$ionicPlatform,$cordovaDevice,$cordovaSplashscreen,deviceInfo) {
   $ionicPlatform.ready(function() {
       //$cordovaSplashscreen.hide();
-      deviceId.setId("12234");//$cordovaDevice.getUUID()
+      deviceInfo.setId($cordovaDevice.getUUID());
     //$cordovaSplashscreen.hide();
     if(window.cordova && window.cordova.plugins.Keyboard) {
       // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard

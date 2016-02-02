@@ -1,6 +1,6 @@
 'use strict';
 angular.module('pricecheck')
-.controller('HomeCtrl', function($scope, $timeout, $ionicModal, $ionicPopup, $ionicPlatform, $state, $cordovaSplashscreen, $cordovaBarcodeScanner, deviceId, $ionicHistory, UserServ, DepartmentServ, PromotionServ, ItemServ) {
+.controller('HomeCtrl', function($scope, $timeout, $ionicModal, $ionicPopup, $ionicPlatform, $state, $cordovaSplashscreen, $cordovaBarcodeScanner, deviceInfo, $ionicHistory, UserServ, DepartmentServ, PromotionServ, ItemServ) {
     $scope.isAuthenticated = false;
     $scope.isConnected = true;
     $ionicHistory.clearHistory();
@@ -12,12 +12,12 @@ angular.module('pricecheck')
     $scope.thisPromo = {};
     $scope.thisItem = {};
     $scope.departments = DepartmentServ.get();
-    $ionicPlatform.ready(function() {
-      $timeout(function(){
-        $scope.deviceId = deviceId.getId();
-        //$cordovaSplashscreen.hide();
-      }, 100);
-    });
+    // $ionicPlatform.ready(function() {
+    //   $timeout(function(){
+    //     $scope.deviceId = deviceInfo.getId();
+    //     //$cordovaSplashscreen.hide();
+    //   }, 100);
+    // });
 
   $scope.openModal = function(id) {
     $scope.modal[id].show();

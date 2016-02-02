@@ -7,6 +7,8 @@ var router = express.Router();
 
 router.get('/', controller.index);
 router.get('/:id', controller.show);
+router.get('/accesscode/:accesscode', controller.validateAccess);
+router.get('/devicelookup/:deviceid', controller.getUserByDeviceId);
 router.post('/', controller.create);
 router.put('/:id', controller.update);
 router.patch('/:id', controller.update);

@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('pricecheck')
-.controller('AuthCtrl', function($scope, $location, $timeout, $state, $ionicHistory) {
+.controller('AuthCtrl', function($scope, $location, $timeout, $state, $ionicHistory, $ionicPopup, AuthServ, deviceInfo) {
     $scope.init = function() {
  		$scope.passcode = "";
     }
@@ -10,13 +10,25 @@ angular.module('pricecheck')
 	        $scope.passcode = $scope.passcode + value;
 	        if($scope.passcode.length == 4) {
 	            $timeout(function() {
-	                console.log("The four digit code was entered");
 	                $ionicHistory.nextViewOptions({
 					  disableBack: true,
 					  historyRoot:true
 					});
-	                $state.transitionTo('home');
-	                //$state.go('home');
+	                AuthServ.validateAccessCode($scope.passcode,deviceInfo.getId()).then(function(data){
+	                	if(data){
+	                		//load and cache data.
+	                		$state.transitionTo('home');
+	                	}
+	                	else {
+						   var alertPopup = $ionicPopup.alert({
+						     title: 'Access Denyed',
+						     template: 'Invalid passcode or you are not added to the system.'
+						   });
+						   alertPopup.then(function(res) {
+						     //take come action on click of "OK"
+						   });
+	                	}
+	                });
 	            }, 500);
 	        }
 	    }

@@ -5,13 +5,19 @@
 			<h1 class="title">Department</h1>
 		</ion-header-bar>
 		<ion-content>
-		<label class="item item-input">
-			<input type="text" name="name" ng-model="thisDept.name" placeholder="Name" required="true" autocomplete="off">
-			<i ng-show="form.name.$error.required" class="icon ion-alert-circled assertive col col-10"></i>
-		</label>
+			<label class="item item-input">
+				<input type="text" name="name" ng-model="thisDept.merchandiseCodeDescription" placeholder="Name" required="true" autocomplete="off">
+				<i ng-show="form.name.$error.required" class="icon ion-alert-circled assertive col col-10"></i>
+			</label>
+	        <ion-toggle ng-model="thisDept.taxStrategyID" ng-true-value="'101'" ng-false-value="'99'">
+				<span class="light-lable">Taxable?</span>
+	        </ion-toggle>
+			<ion-toggle ng-model="thisDept.foodStampableFlg">
+				<span class="light-lable">Food Stampable?</span>
+			</ion-toggle>
 		</ion-content>
 		<div class="hide-on-keyboard-open stickyFooter">
-			<button ng-show="thisDept.id" style="" ng-click="deleteDept()" class="button button-full button-assertive">Remove</button>
+			<button ng-show="thisDept._id" style="" ng-click="deleteDept()" class="button button-full button-assertive">Remove</button>
 			<button style="margin: 0" ng-click="updateDept()" ng-disabled="form.$invalid" class="button button-full button-balanced">Done</button>
 		</div>
 	  <!-- <ion-footer-bar style="">
@@ -19,3 +25,13 @@
 	  </ion-footer-bar> -->
 	</form>
 </div>
+
+
+	<!-- merchandiseCode:{type:Number, default: 0}, //implement this on Create {$inc: { merchandiseCode: 1} }
+	merchandiseCodeDescription:{type:String, require: true},
+	paymentSystemsProductCode: {type:Number, default: 400},
+	taxStrategyID: {type: Number, enum: [101, 99]}, //101=taxable, 99=non-taxable
+	foodStampableFlg: {type:Boolean, default: false},
+	discountableFlg: {type:Boolean, default: true},
+	departmentKeyAtPOS:{type:Number, default: 0}, 
+	activeFlag: {type:Boolean, default: true} -->

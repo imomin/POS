@@ -11,7 +11,12 @@ angular.module('pricecheck')
     $scope.thisDept = {};
     $scope.thisPromo = {};
     $scope.thisItem = {};
-    $scope.departments = DepartmentServ.get();
+    $scope.thisGroup = {'sellingUnits': 1,'minimumCustomerAge': 0,'foodStampableFlg':false};
+    $scope.departments = [];
+
+    DepartmentServ.get().then(function(data){
+      $scope.departments = data;
+    });
     // $ionicPlatform.ready(function() {
     //   $timeout(function(){
     //     $scope.deviceId = deviceInfo.getId();
@@ -25,6 +30,7 @@ angular.module('pricecheck')
 
   $scope.closeModal = function(id) {
     $scope.modal[id].hide();
+    console.log($scope.thisGroup);
   }
 
   $scope.$on('$destroy', function() {
@@ -56,6 +62,17 @@ angular.module('pricecheck')
   $scope.showPromotions = function(){
     $ionicModal.fromTemplateUrl('html/promotion.html', {
       id:'promo',
+      scope: $scope,
+      animation: 'slide-in-up'
+    }).then(function(modal) {
+      $scope.modal[modal.id] = modal;
+      $scope.modal[modal.id].show();
+    });
+  }
+
+  $scope.showGroups = function(){
+    $ionicModal.fromTemplateUrl('html/group.html', {
+      id:'group',
       scope: $scope,
       animation: 'slide-in-up'
     }).then(function(modal) {
@@ -100,6 +117,18 @@ angular.module('pricecheck')
     });   
   }
 
+  // $scope.addNewGroup = function(){
+  //   $scope.thisPromo = {};
+  //   $ionicModal.fromTemplateUrl('html/groupEdit.html', {
+  //     id:'editGroup',
+  //     scope: $scope,
+  //     animation: 'slide-in-up'
+  //   }).then(function(modal) {
+  //     $scope.modal[modal.id] = modal;
+  //     $scope.modal[modal.id].show();
+  //   });   
+  // }
+
   $scope.updateUser = function(){
     //$scope.users = 
     UserServ.set($scope.thisUser);
@@ -109,6 +138,7 @@ angular.module('pricecheck')
 
   $scope.updateDept = function(){
     DepartmentServ.set($scope.thisDept);
+    $scope.thisDept = {};
     $scope.closeModal('editDept');
   }
 
@@ -116,6 +146,11 @@ angular.module('pricecheck')
     PromotionServ.set($scope.thisPromo);
     $scope.closeModal('editPromo');
   }
+
+  // $scope.updateGroup = function(){
+  //   GroupServ.set($scope.thisGroup);
+  //   $scope.closeModal('editGroup');
+  // }
 
   $scope.getItemInfo = function(){
     $scope.thisItem = {};
@@ -132,10 +167,10 @@ angular.module('pricecheck')
     });
   }
 
-  $scope.setItemInfo = function(){
-    ItemServ.set($scope.thisItem);
-    $scope.closeModal('item');
-  }
+  // $scope.setItemInfo = function(){
+  //   ItemServ.set($scope.thisGroup);
+  //   $scope.closeModal('editGroup');
+  // }
 
   $scope.deleteItem = function(POSCode){
     var confirmPopup = $ionicPopup.confirm({
@@ -172,17 +207,6 @@ angular.module('pricecheck')
       $scope.scanData.text = "4902430496247";
       $scope.getItemInfo();
     }
-  };
-
-  $scope.selectDepartment = function(){
-    $ionicModal.fromTemplateUrl('html/departmentOption.html', {
-      id:'deptOption',
-      scope: $scope,
-      animation: 'slide-in-up'
-    }).then(function(modal) {
-        $scope.modal[modal.id] = modal;
-        $scope.modal[modal.id].show();
-      });
   };
 
   window.addEventListener('native.keyboardshow', function(){

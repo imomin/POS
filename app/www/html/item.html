@@ -4,30 +4,44 @@
     <button class="button button-icon icon ion-ios-arrow-back" ng-click="closeModal('item')"></button>
       <h1 class="title">Item</h1>
     </ion-header-bar>
-    <ion-content>
-      <div class="item item-input">
-        <span class="input-label light-lable">Code</span>
-        {{thisItem.POSCode}}
-      </div>
-      <div class="item  item-input" ng-click="selectDepartment()">
-        <span class="input-label light-lable">Department</span>
-        <div class="">{{thisItem.department.name}}</div>
-      </div>
-      <label class="item item-input">
-        <span class="input-label light-lable">Name</span>
-        <input type="text" name="name" ng-model="thisItem.Description" placeholder="Name" required="true" autocomplete="off">
-        <i ng-show="form.name.$error.required" class="icon ion-alert-circled assertive col col-10"></i>
-      </label>
-      <label class="item item-input">
-        <span class="input-label light-lable">Units</span>
-        <input min="1" type="number" name="unit" ng-model="thisItem.SellingUnits" placeholder="Units" required="true" autocomplete="off">
-        <i ng-show="form.name.$error.required" class="icon ion-alert-circled assertive col col-10"></i>
-      </label>
-      <label class="item item-input">
-        <span class="input-label light-lable">Price $</span>
-        <input min=".10" type="number" name="price" ng-model="thisItem.RegularSellPrice" placeholder="Price" required="true" autocomplete="off">
-        <i ng-show="form.name.$error.required" class="icon ion-alert-circled assertive col col-10"></i>
-      </label>
+    <ion-content has-header="true" has-footer="true">
+      <ion-scroll direction="y" style="height:73vh;">
+        <div class="item item-input">
+          <span class="input-label light-lable">Barcode</span>
+          {{thisItem.POSCode}}
+        </div>
+        <div class="item  item-input" ng-click="selectDepartment()">
+          <span class="input-label light-lable">Department</span>
+          <div class="">{{thisItem.department.name}}</div>
+        </div>
+        <label class="item item-input">
+          <span class="input-label light-lable">Name</span>
+          <input type="text" name="name" ng-model="thisItem.Description" placeholder="Name" required="true" autocomplete="off">
+          <i ng-show="form.name.$error.required" class="icon ion-alert-circled assertive col col-10"></i>
+        </label>
+        <label class="item item-input">
+          <span class="input-label light-lable">Units</span>
+          <input min="1" type="number" name="unit" ng-model="thisItem.SellingUnits" placeholder="Units" required="true" autocomplete="off">
+          <i ng-show="form.name.$error.required" class="icon ion-alert-circled assertive col col-10"></i>
+        </label>
+        <label class="item item-input">
+          <span class="input-label light-lable">Price $</span>
+          <input min=".10" type="number" name="price" ng-model="thisItem.RegularSellPrice" placeholder="Price" required="true" autocomplete="off">
+          <i ng-show="form.name.$error.required" class="icon ion-alert-circled assertive col col-10"></i>
+        </label>        
+        <ion-toggle ng-model="thisItem.isTaxable" ng-true-value="'taxable'" ng-false-value="'nontaxable'">
+          <span class="light-lable">Taxable?</span>
+        </ion-toggle>
+        <ion-toggle ng-model="thisItem.isFoodStampable">
+          <span class="light-lable">Food Stampable Item?</span>
+        </ion-toggle>
+        <div class="item item-input list list-inline" style="padding: 0px 0px 0px 16px;">
+            <span class="input-label light-lable">Restriction</span>
+            <ion-radio ng-value="'none'" ng-model="thisItem.restriction">None</ion-radio>
+            <ion-radio ng-value="'18+'" ng-model="thisItem.restriction">18+</ion-radio>
+            <ion-radio ng-value="'21+'" ng-model="thisItem.restriction">21+</ion-radio>
+        </div>
+      </ion-scroll>
     </ion-content>
     <div class="hide-on-keyboard-open stickyFooter">
       <button ng-show="thisItem.id" style="" ng-click="deleteItem(thisItem.POSCode)" class="button button-full button-assertive">Remove</button>

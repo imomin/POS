@@ -7,6 +7,10 @@
 import Thing from '../api/thing/thing.model';
 import User from '../api/user/user.model';
 import Employee from '../api/employee/employee.model';
+import Counter from '../api/counter/counter.model';
+import Department from '../api/department/department.model';
+import Item from '../api/item/item.model';
+
 
 Thing.find({}).removeAsync()
   .then(() => {
@@ -79,14 +83,36 @@ User.find({}).removeAsync()
 
 Employee.find({}).removeAsync()
   .then(() => {
-      Employee.createAsync({
-        name: 'Alex',
-        role: 'admin'
-    }, {
-        name: 'Mike',
-        accessCode: '1231'
-    })
-    .then(() => {
-      console.log('finished populating employees');
-    });
+    //   Employee.createAsync({
+    //     name: 'Alex',
+    //     role: 'admin'
+    // }, {
+    //     name: 'Mike',
+    //     accessCode: '1231'
+    // })
+    // .then(() => {
+    //   console.log('finished populating employees');
+    // });
   });
+
+  // Department.find({}).removeAsync()
+  // .then(() => { });
+
+  //Item.find({}).removeAsync();
+
+  Counter.count({})
+    .then(count => {
+      if(!count){
+        Counter.createAsync({
+          _id: 'departmentMerchandiseCode',
+          seq: 100
+        }, {
+          _id: 'itemID',
+          seq: 1000
+        })
+        .then(() => {
+          console.log('finished populating Counter');
+        });
+      }
+    })
+    .catch(err => next(err));

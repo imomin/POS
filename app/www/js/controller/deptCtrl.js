@@ -2,7 +2,9 @@
 
 angular.module('pricecheck')
 .controller('DeptCtrl', function($scope, $timeout, $ionicModal, $ionicPopup, DepartmentServ) {
-	$scope.departments = DepartmentServ.get();
+	DepartmentServ.get().then(function(data){
+		$scope.departments = data;
+	});
 	$scope.thisDept = {};
 
 	$scope.openModal = function() {
@@ -16,10 +18,12 @@ angular.module('pricecheck')
 
 	$scope.$on('$destroy', function() {
 		$scope.modal.remove();
+		DepartmentServ.distroySync();
 	});
 
 	$scope.updateDept = function(){
 		DepartmentServ.set($scope.thisDept);
+		$scope.thisDept = {};
 		$scope.closeModal('editDept');
 	}
 

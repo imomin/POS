@@ -4,13 +4,19 @@ angular.module('pricecheck')
 		var users = [];
 		return {
 				 set:function(user) {
+				 	var defer = $q.defer();
 				 	//$http.defaults.headers.post['X-XSRF-TOKEN'] = $cookies.get("XSRF-TOKEN");
 				 	if(user._id){
-				 		$http.put(serverAddr + '/api/employees/'+user._id, user);
+				 		$http.put(serverAddr + '/api/employees/'+user._id, user).then(function(response){
+				 			defer.resolve(response);
+				 		});
 				 	}
 				 	else {
-				 		$http.post(serverAddr + '/api/employees/', user);
+				 		$http.post(serverAddr + '/api/employees/', user).then(function(response){
+				 			defer.resolve(response);
+				 		});
 				 	}
+				 	return defer.promise;
 			   }, 	
 			   	get:function(){
 			   		var defer = $q.defer();
@@ -38,6 +44,5 @@ angular.module('pricecheck')
 					});
 	   				return defer.promise;
 	   			}
-			};	   	
-
+			};
 	});

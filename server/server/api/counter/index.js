@@ -1,15 +1,12 @@
 'use strict';
 
 var express = require('express');
-var controller = require('./employee.controller');
+var controller = require('./counter.controller');
 
 var router = express.Router();
 
 router.get('/', controller.index);
-router.get('/count', controller.count);
 router.get('/:id', controller.show);
-router.get('/accesscode/:accesscode', controller.validateAccess);
-router.get('/devicelookup/:deviceid', controller.getUserByDeviceId);
 router.post('/', controller.create);
 router.put('/:id', controller.update);
 router.patch('/:id', controller.update);

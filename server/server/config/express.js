@@ -86,13 +86,13 @@ export default function(app) {
 
     app.use(function (req, res, next) {
       // Website you wish to allow to connect
-      res.setHeader('Access-Control-Allow-Origin', 'http://localhost:8100');
+      res.setHeader('Access-Control-Allow-Origin', '*');
       // Request methods you wish to allow
       res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
       // Request Methods
       // res.setHeader('Access-Control-Request-Method', '*');
       // Request headers you wish to allow
-      res.setHeader('Access-Control-Allow-Headers', 'Origin, Content-Type, Accept, XSRF-TOKEN, X-XSRF-TOKEN');
+      res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
       // Set to true if you need the website to include cookies in the requests sent
       // to the API (e.g. in case you use sessions)
       // res.setHeader('Access-Control-Allow-Credentials', false);

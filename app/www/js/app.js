@@ -4,7 +4,7 @@
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 angular.module('pricecheck', ['ionic','ngCordova','ngCookies','btford.socket-io'])
-.constant('serverAddr','http://10.248.30.228:9000')
+.constant('serverAddr','http://10.248.30.238:9000')
 .factory('deviceInfo', function () {
     var _uuid = "";
     return {
@@ -12,21 +12,43 @@ angular.module('pricecheck', ['ionic','ngCordova','ngCookies','btford.socket-io'
         setId: function(value) { _uuid = value;}
     };
 })
-.config(function($stateProvider, $urlRouterProvider, $httpProvider) {
+.config(function($stateProvider, $urlRouterProvider, $httpProvider, serverAddr) {
     "use strict";
     $stateProvider           
-        .state('connect', {name: 'connect', url: '/connect', templateUrl: 'html/connect.html', controller: 'MainCtrl'})
+        .state('connect', {name: 'connect', url: '/', templateUrl: 'html/connect.html', controller: 'MainCtrl'})
         .state('passcode', {name: 'passcode', url: '/passcode', templateUrl: 'html/passcode.html', controller: 'AuthCtrl'})
         .state('home', {name: 'home', url: '/home', templateUrl: 'html/home.html', controller: 'HomeCtrl'})
         .state('user', {name: 'user', url: '/user', templateUrl: 'html/users.html', controller: 'UserCtrl'})
+        .state('error', {name: 'error', url: '/error', templateUrl: 'html/error.html'})
     ;
-    $urlRouterProvider.otherwise('/connect');
+    $urlRouterProvider.otherwise('/');
+    //   var link = document.createElement("script");
+    //   link.src =  serverAddr +'/socket.io-client/socket.io.js';
+    //   var refTag = document.getElementsByTagName("title")[0];
+    //   refTag.parentNode.insertBefore(link,refTag);
 })
 
-.run(function($rootScope,$ionicPlatform,$cordovaDevice,$cordovaSplashscreen,deviceInfo) {
+.run(function($rootScope,$ionicPlatform,$cordovaDevice,$cordovaSplashscreen,$cordovaNetwork,$ionicPopup,deviceInfo) {
   $ionicPlatform.ready(function() {
       //$cordovaSplashscreen.hide();
-      deviceInfo.setId($cordovaDevice.getUUID());
+      try {
+        deviceInfo.setId($cordovaDevice.getUUID());
+      }
+      catch (err){
+        deviceInfo.setId("811536972167970e");
+      }
+
+      // if ($cordovaNetwork.isOffline()) {
+      //     $ionicPopup.confirm({
+      //         title: "Internet Disconnected",
+      //         content: "The internet is disconnected on your device."
+      //     })
+      //     .then(function(result) {
+      //         if(!result) {
+      //             ionic.Platform.exitApp();
+      //         }
+      //     });
+      // }
     //$cordovaSplashscreen.hide();
     if(window.cordova && window.cordova.plugins.Keyboard) {
       // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard

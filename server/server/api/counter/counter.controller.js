@@ -1,16 +1,16 @@
 /**
  * Using Rails-like standard naming convention for endpoints.
- * GET     /api/items              ->  index
- * POST    /api/items              ->  create
- * GET     /api/items/:id          ->  show
- * PUT     /api/items/:id          ->  update
- * DELETE  /api/items/:id          ->  destroy
+ * GET     /api/counters              ->  index
+ * POST    /api/counters              ->  create
+ * GET     /api/counters/:id          ->  show
+ * PUT     /api/counters/:id          ->  update
+ * DELETE  /api/counters/:id          ->  destroy
  */
 
 'use strict';
 
 import _ from 'lodash';
-var Item = require('./item.model');
+var Counter = require('./counter.model');
 
 function handleError(res, statusCode) {
   statusCode = statusCode || 500;
@@ -23,19 +23,7 @@ function responseWithResult(res, statusCode) {
   statusCode = statusCode || 200;
   return function(entity) {
     if (entity) {
-        res.status(statusCode).json(entity);
-    }
-  };
-}
-
-function responseWithDepartmentInResult(res, statusCode) {
-  statusCode = statusCode || 200;
-  return function(entity) {
-    if (entity) {
-      entity.populateAsync('department')
-      .then(function(result){
-        res.status(statusCode).json(result);
-      })
+      res.status(statusCode).json(entity);
     }
   };
 }
@@ -53,7 +41,6 @@ function handleEntityNotFound(res) {
 function saveUpdates(updates) {
   return function(entity) {
     var updated = _.merge(entity, updates);
-    entity.items = updates.items;//hack to keep the items came from api.
     return updated.saveAsync()
       .spread(updated => {
         return updated;
@@ -72,47 +59,43 @@ function removeEntity(res) {
   };
 }
 
-// Gets a list of Items
+// Gets a list of Counters
 export function index(req, res) {
-  Item.findAsync()
+  Counter.findAsync()
     .then(responseWithResult(res))
     .catch(handleError(res));
 }
 
-// Gets a single Item from the DB
+// Gets a single Counter from the DB
 export function show(req, res) {
-  Item.findByIdAsync(req.params.id)
+  Counter.findByIdAsync(req.params.id)
     .then(handleEntityNotFound(res))
-    .then(responseWithDepartmentInResult(res))
+    .then(responseWithResult(res))
     .catch(handleError(res));
 }
 
-// Creates a new Item in the DB
+// Creates a new Counter in the DB
 export function create(req, res) {
-  var newItem = new Item(req.body);
-  newItem.getNextId(function(err, counter){
-      newItem.itemID = counter.seq;
-      Item.createAsync(newItem)
-        .then(responseWithResult(res, 201))
-        .catch(handleError(res));
-      });
+  Counter.createAsync(req.body)
+    .then(responseWithResult(res, 201))
+    .catch(handleError(res));
 }
 
-// Updates an existing Item in the DB
+// Updates an existing Counter in the DB
 export function update(req, res) {
   if (req.body._id) {
     delete req.body._id;
   }
-  Item.findByIdAsync(req.params.id)
+  Counter.findByIdAsync(req.params.id)
     .then(handleEntityNotFound(res))
     .then(saveUpdates(req.body))
     .then(responseWithResult(res))
     .catch(handleError(res));
 }
 
-// Deletes a Item from the DB
+// Deletes a Counter from the DB
 export function destroy(req, res) {
-  Item.findByIdAsync(req.params.id)
+  Counter.findByIdAsync(req.params.id)
     .then(handleEntityNotFound(res))
     .then(removeEntity(res))
     .catch(handleError(res));

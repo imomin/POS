@@ -1,0 +1,64 @@
+Oops....
+
+<ion-modal-view>
+    <form name="form" novalidate>
+    <!-- <ion-header-bar align-title="center" class="">
+    <button class="button button-icon icon ion-ios-arrow-back" ng-click="closeModal('item')"></button>
+      <h1 class="title">Group</h1>
+    </ion-header-bar> -->
+    <ion-tabs class="tabs-icon-top">
+<!--       <button class="button button-icon icon ion-ios-arrow-back" ng-click="closeModal('item')"></button> -->
+      <ion-tab title="Group" icon-on="ion-ios-filing" icon-off="ion-ios-filing-outline">
+          <ion-scroll direction="y" style="height:81vh;">
+            <ion-nav-view name="group-info">
+              <ion-view title="'Footer and Tab Example'">
+                <ion-content has-header="false" has-subheader="false" has-footer="true" has-tabs="false" style="top: 50px;">
+                  <div class="item  item-input" ng-click="selectDepartment()">
+                    <span class="input-label light-lable">Department</span>
+                    <div class="">{{thisGroup.department.name}}</div>
+                  </div>
+                  <label class="item item-input">
+                    <span class="input-label light-lable">Name</span>
+                    <input type="text" name="name" ng-model="thisGroup.name" placeholder="Name" required="true" autocomplete="off">
+                    <i ng-show="form.name.$error.required" class="icon ion-alert-circled assertive col col-10"></i>
+                  </label>
+                  <label class="item item-input">
+                    <span class="input-label light-lable">Units</span>
+                    <input min="1" type="number" name="unit" ng-model="thisGroup.SellingUnits" placeholder="Units" required="true" autocomplete="off">
+                    <i ng-show="form.name.$error.required" class="icon ion-alert-circled assertive col col-10"></i>
+                  </label>
+                  <label class="item item-input">
+                    <span class="input-label light-lable">Price $</span>
+                    <input min=".10" type="number" name="price" ng-model="thisGroup.RegularSellPrice" placeholder="Price" required="true" autocomplete="off">
+                    <i ng-show="form.name.$error.required" class="icon ion-alert-circled assertive col col-10"></i>
+                  </label>        
+                  <ion-toggle ng-model="thisGroup.isTaxable" ng-true-value="'taxable'" ng-false-value="'nontaxable'">
+                    <span class="light-lable">Taxable?</span>
+                  </ion-toggle>
+                  <ion-toggle ng-model="thisGroup.isFoodStampable">
+                    <span class="light-lable">Food Stampable Item?</span>
+                  </ion-toggle>
+                  <div class="item item-input list list-inline" style="padding: 0px 0px 0px 16px;">
+                      <span class="input-label light-lable">Restriction</span>
+                      <ion-radio ng-value="'none'" ng-model="thisGroup.restriction">None</ion-radio>
+                      <ion-radio ng-value="'18+'" ng-model="thisGroup.restriction">18+</ion-radio>
+                      <ion-radio ng-value="'21+'" ng-model="thisGroup.restriction">21+</ion-radio>
+                  </div>
+                </ion-content>
+              </ion-view>
+            </ion-nav-view>
+          </ion-scroll>
+          <div class="hide-on-keyboard-open stickyFooter">
+            <button ng-show="thisGroup.id" style="" ng-click="deleteItem(thisGroup.POSCode)" class="button button-full button-assertive">Remove</button>
+            <button style="margin: 0" ng-click="setItemInfo()" ng-disabled="form.$invalid || !thisGroup.department" class="button button-full button-balanced">Push Update</button>
+          </div>
+      </ion-tab>
+      <ion-tab title="Items" icon-on="ion-ios-filing" icon-off="ion-ios-filing-outline">
+      </ion-tab>
+    </ion-tabs>
+    <!-- <ion-footer-bar style="">
+        <button style="margin: 0" ng-click="updateUser()" ng-disabled="form.$invalid" class="button button-full button-balanced">Done</button>
+    </ion-footer-bar> -->
+  </form>
+</ion-modal-view>
+<!-- {"id":2,"POSCode":"","Description":"","SellingUnits":"1","RegularSellPrice":"1.79","ItemId":"001"}, -->

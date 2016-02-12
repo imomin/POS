@@ -3,6 +3,8 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+    <meta http-equiv="Content-Security-Policy"/>
+    <!-- <meta http-equiv="Content-Security-Policy" content="default-src *; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval' http://192.168.1.133:9000 http://192.168.1.133:35730"> -->
     <title></title>
 
     <link href="lib/ionic/css/ionic.css" rel="stylesheet">
@@ -20,7 +22,7 @@
     <script src="lib/lodash/dist/lodash.min.js"></script>
     <script src="lib/angular-cookies/angular-cookies.js"></script>
     <script src="cordova.js"></script>
-    <script src="http://localhost:9000/socket.io-client/socket.io.js"></script>
+    <script src="js/socket/client-socket.io.js"></script>
     <!-- your app's js -->
     <script src="js/app.js"></script>
     <script src="js/socket/socket.service.js"></script>
@@ -30,11 +32,13 @@
     <script src="js/controller/userCtrl.js"></script>
     <script src="js/controller/deptCtrl.js"></script>
     <script src="js/controller/promoCtrl.js"></script>
+    <script src="js/controller/groupCtrl.js"></script>
     <script src="js/service/authService.js"></script>
     <script src="js/service/itemService.js"></script>
     <script src="js/service/userService.js"></script>
     <script src="js/service/departmentService.js"></script>
     <script src="js/service/promotionService.js"></script>
+    <script src="js/service/groupService.js"></script>
   </head>
   <body ng-app="pricecheck">
     <ion-pane>

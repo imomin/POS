@@ -6,12 +6,16 @@
     <!-- <button class="button button-icon icon ion-ios-compose-outline" ng-click="addNewDepartment()"></button> -->
   </ion-header-bar>
   <ion-view>
-  <ion-content has-header="true" has-footer="true">
-      <ion-scroll direction="y" style="height:90vh;">
-          <ion-list>
-            <ion-radio ng-change="closeModal('deptOption');" ng-repeat="department in departments" ng-model="thisItem.department" ng-value="department">{{department.name}}</ion-radio>
-          </ion-list>
-      </ion-scroll>
-  </ion-content>
+    <ion-content has-header="true" has-footer="true">
+        <ion-scroll direction="y" style="height:90vh;">
+            <ion-list>
+              <ion-item item="department" ng-click="selectedDepartment(department);" ng-repeat="department in departments  track by department._id" ng-model="thisGroup.department">
+                {{department.merchandiseCodeDescription}}
+                <i class="icon ion-checkmark option-list-icon" ng-show="department._id == thisGroup.department._id"></i>
+              </ion-item>
+              <!-- <ion-radio ng-change="closeModal('deptOption');" ng-repeat="department in departments  track by department._id" ng-value="department"  ng-model="thisGroup.department">{{department.merchandiseCodeDescription}}</ion-radio> -->
+            </ion-list>
+        </ion-scroll>
+    </ion-content>
   </ion-view>
 </div>

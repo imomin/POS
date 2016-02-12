@@ -22,7 +22,7 @@ var EmployeeSchema = new mongoose.Schema({
 
 EmployeeSchema.methods = {
   generateAccessCode() {
-	return Math.floor(Math.random()*9000) + 1000;
+	   return Math.floor(Math.random()*9000) + 1000;
   }
 }
 export default mongoose.model('Employee', EmployeeSchema);

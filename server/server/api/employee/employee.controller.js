@@ -77,7 +77,9 @@ export function show(req, res) {
 // Creates a new Employee in the DB
 export function create(req, res) {
   var newEmployee = new Employee(req.body);
-  newEmployee.accessCode = newEmployee.generateAccessCode();
+  if(!newEmployee.deviceId){
+    newEmployee.accessCode = newEmployee.generateAccessCode();
+  }
   Employee.createAsync(newEmployee)
     .then(responseWithResult(res, 201))
     .catch(handleError(res));
@@ -104,7 +106,7 @@ export function destroy(req, res) {
 }
 
 /**
- * Get my info
+ *  Custom code
  */
 export function validateAccess(req, res, next) {
   var deviceId = req.query.deviceId;
@@ -132,6 +134,19 @@ export function getUserByDeviceId(req, res, next) {
         return res.status(401).end();
       }
       res.status(204).end();
+    })
+    .catch(err => next(err));
+}
+
+export function count(req, res, next) {
+  var deviceId = req.params.deviceid;
+  Employee.count({})
+    .then(count => {
+      console.log(count);
+      if (!count) {
+        return res.json({"count":0});
+      }
+      return res.json({"count":count});
     })
     .catch(err => next(err));
 }

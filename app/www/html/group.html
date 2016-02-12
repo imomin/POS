@@ -1,0 +1,20 @@
+<div class="modal" ng-controller="GroupCtrl">
+  <ion-header-bar align-title="center" class="">
+    <h1 class="title">Groups</h1>
+    <button class="button button-icon icon ion-ios-compose-outline" ng-click="addNewGroup()"></button>
+  </ion-header-bar>
+  <ion-view>
+    <ion-content  has-header="true" has-footer="true">
+        <ion-scroll direction="y">
+          <ion-list >
+            <ion-item ng-repeat="group in groups" href="#" ng-click="showDetails(group);">
+                {{group.description}}
+            </ion-item>
+          </ion-list>
+        </ion-scroll>
+    </ion-content>
+  </ion-view>
+  <ion-footer-bar style="">
+      <button style="margin: 0" class="button button-full button-balanced" ng-click="closeModal('group')">Done</button>
+  </ion-footer-bar>
+</div>

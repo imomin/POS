@@ -12,9 +12,10 @@
 		<ion-toggle ng-model="thisUser.role" ng-true-value="'admin'" ng-false-value="'user'">
 		Admin
 		</ion-toggle>
-		<label class="item item-input">
-			<input style="text-align: center;" type="text" ng-model="thisUser.accessCode" placeholder="" ng-disabled="true" autocomplete="off">
-		</label>
+		<div class="item item-input">
+			<span class="input-label light-lable">Access Code</span>
+			{{thisUser.accessCode}}
+		</div>
 	  </ion-content>
 		<div class="hide-on-keyboard-open stickyFooter">
 			<button ng-show="1===2" style="" ng-click="getAccessCode()" class="button button-full button-calm">Get Access Code</button>

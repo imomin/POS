@@ -2,18 +2,17 @@
 'use strict';
 
 angular.module('pricecheck')
-  .factory('socket', function(socketFactory) {
+  .factory('socket', function(socketFactory,serverAddr) {
     // socket.io now auto-configures its connection when we ommit a connection url
-    var ioSocket = io('http://localhost:9000', {
+    var ioSocket = io(serverAddr, {
       // Send auth token on connection, you will need to DI the Auth service above
       // 'query': 'token=' + Auth.getToken()
       path: '/socket.io-client'
     });
-
-    var socket = socketFactory({ ioSocket });
+    var socket = socketFactory({ ioSocket:ioSocket });
 
     return {
-      socket,
+      'socket':socket,
 
       /**
        * Register listeners to sync an array with updates on a model
@@ -25,7 +24,7 @@ angular.module('pricecheck')
        * @param {Array} array
        * @param {Function} cb
        */
-      syncUpdates(modelName, array, cb) {
+      'syncUpdates':function(modelName, array, cb) {
         cb = cb || angular.noop;
 
         /**
@@ -63,7 +62,7 @@ angular.module('pricecheck')
        *
        * @param modelName
        */
-      unsyncUpdates(modelName) {
+      'unsyncUpdates':function(modelName) {
         socket.removeAllListeners(modelName + ':save');
         socket.removeAllListeners(modelName + ':remove');
       }

@@ -29,6 +29,22 @@ ion-scroll[direction=y] {
     color:#B1B1B1;
 }
 
+/*.tabs-top > .tabs, .tabs.tabs-top {
+  top:0px !important;
+}
+
+.platform-ios .bar-custom {
+  
+}
+
+.platform-android .has-tabs-top {
+    top: 50px;
+}
+
+.platform-browser .bar-custom{
+
+}
+*/
 .slide-in-right {
   -webkit-transform: translateX(100%);
     transform: translateX(100%); }
@@ -122,3 +138,92 @@ ion-scroll[direction=y] {
     -ms-flex-item-align: auto;
     align-self: auto;
 }
+
+.list.list-inline {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -moz-box;
+    display: -moz-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-direction: normal;
+    -webkit-box-orient: horizontal;
+    -webkit-flex-direction: row;
+    -moz-flex-direction: row;
+    -ms-flex-direction: row;
+    flex-direction: row;
+    -webkit-flex-wrap: nowrap;
+    -moz-flex-wrap: nowrap;
+    -ms-flex-wrap: none;
+    flex-wrap: nowrap;
+    width: 100%;
+}
+    .list.list-inline .item {
+    -webkit-box-flex: 1;
+    -webkit-flex: 1;
+    -moz-box-flex: 1;
+    -moz-flex: 1;
+    -ms-flex: 1;
+    flex: 1;
+    font-size: inherit; }
+    .list.list-inline .item-radio .item-content {
+    /* give some room to the right for the checkmark icon */
+    padding: 12px;
+    padding-right: 16px; }
+    .list.list-inline .item-radio .radio-icon {
+    /* checkmark icon will be hidden by default */
+    padding: 5px; }
+    .list.list-inline .item-checkbox {
+    padding-left: 44px; }
+    .list.list-inline .item-checkbox .checkbox {
+      padding-left: 0; }
+
+
+
+
+    .list.list-inline.pretty .item-radio {
+    border: none;
+    background: #EFEFEF;
+    margin-right: 1px; }
+    .list.list-inline.pretty .item-radio:first-child {
+      -webkit-border-top-left-radius: 50px;
+      border-top-left-radius: 50px;
+      -webkit-border-bottom-left-radius: 50px;
+      border-bottom-left-radius: 50px; }
+    .list.list-inline.pretty .item-radio:last-child {
+      -webkit-border-top-right-radius: 50px;
+      border-top-right-radius: 50px;
+      -webkit-border-bottom-right-radius: 50px;
+      border-bottom-right-radius: 50px; }
+    .list.list-inline.pretty .item-radio .item-content {
+      background: #EFEFEF;
+      text-align: center;
+      padding: 12px; }
+    .list.list-inline.pretty .item-radio .icon {
+      display: none; }
+    .list.list-inline.pretty .item-radio input:checked ~ .item-content {
+      background-color: #444;
+      color: white;
+      -webkit-border-radius: 50px;
+      border-radius: 50px; 
+    }
+
+    .option-list-icon {
+        position: absolute;
+        top: 0;
+        right: 0;
+        z-index: 3;
+        padding: 14px;
+        height: 100%;
+        font-size: 24px;
+    }
+    .list.list-inline .item-radio .item-content {
+        text-align:center;
+    }
+    .item-radio input:checked + .radio-content .item-content {
+        background: rgb(200, 206, 205);
+        color: #544C4C;
+    }
+    .item-radio input:checked + .radio-content .radio-icon {
+        visibility: hidden;
+    }

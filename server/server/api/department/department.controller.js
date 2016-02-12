@@ -74,11 +74,16 @@ export function show(req, res) {
     .catch(handleError(res));
 }
 
+
 // Creates a new Department in the DB
 export function create(req, res) {
-  Department.createAsync(req.body)
-    .then(responseWithResult(res, 201))
-    .catch(handleError(res));
+  var newDepartment = new Department(req.body);
+  newDepartment.getNextId(function(err, counter){
+      newDepartment.merchandiseCode = counter.seq;
+      Department.createAsync(newDepartment)
+      .then(responseWithResult(res, 201))
+      .catch(handleError(res));
+  });
 }
 
 // Updates an existing Department in the DB

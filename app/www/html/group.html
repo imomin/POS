@@ -6,6 +6,10 @@
   <ion-view>
     <ion-content  has-header="true" has-footer="true">
         <ion-scroll direction="y">
+          <ion-item ng-show="itemScanned && !itemFound" style="background-color:#F2F539;">
+            <p class="center">Scanned Item not found.</p><br> 
+            <p class="center">Choose one of the below group or add new.</p>
+          </ion-item>
           <ion-list >
             <ion-item ng-repeat="group in groups" href="#" ng-click="showDetails(group);">
                 {{group.description}}

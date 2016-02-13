@@ -30,7 +30,6 @@ angular.module('pricecheck')
 
   $scope.closeModal = function(id) {
     $scope.modal[id].hide();
-    console.log($scope.thisGroup);
   }
 
   $scope.$on('$destroy', function() {
@@ -153,18 +152,17 @@ angular.module('pricecheck')
   // }
 
   $scope.getItemInfo = function(){
-    $scope.thisItem = {};
-    ItemServ.get($scope.scanData.text).then(function(item){
-      $scope.thisItem = item;
-      $ionicModal.fromTemplateUrl('html/item.html', {
-        id:'item',
-        scope: $scope,
-        animation: 'slide-in-up'
-      }).then(function(modal) {
-        $scope.modal[modal.id] = modal;
-        $scope.modal[modal.id].show();
-      });
-    });
+    // ItemServ.getByBarcode($scope.scanData.text).then(function(item){
+    //   $scope.thisGroup = item;
+    //   $ionicModal.fromTemplateUrl('html/groupEdit.html', {
+    //     id:'editGroup',
+    //     scope: $scope,
+    //     animation: 'slide-in-right'
+    //   }).then(function(modal) {
+    //     $scope.modal[modal.id] = modal;
+    //       $scope.modal[modal.id].show();
+    //   });
+    // });
   }
 
   // $scope.setItemInfo = function(){
@@ -184,29 +182,6 @@ angular.module('pricecheck')
         $scope.closeModal('item');
       }
     });
-  };
-
-  $scope.scan = function(){
-    try {
-      $ionicPlatform.ready(function() {
-        $cordovaBarcodeScanner
-        .scan()
-        .then(function(result) {
-            $scope.scanData = result;
-            if(!result.cancelled){
-              $scope.getItemInfo();
-            }
-        }, function(error) {
-            // An error occurred
-            $scope.scanResult = 'Error: ' + error;
-        });
-      });
-    }
-    catch(err) {
-      $scope.scanData = {}
-      $scope.scanData.text = "4902430496247";
-      $scope.getItemInfo();
-    }
   };
 
   window.addEventListener('native.keyboardshow', function(){

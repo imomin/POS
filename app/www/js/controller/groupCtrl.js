@@ -1,12 +1,12 @@
 'use strict';
 
 angular.module('pricecheck')
-.controller('GroupCtrl', function($scope, $timeout, $ionicModal, $ionicPopup, $ionicListDelegate, ItemServ) {
+.controller('GroupCtrl', function($scope, $timeout, $ionicModal, $ionicPopup, $ionicListDelegate, $ionicTabsDelegate, ItemServ) {
 	$scope.groups = [];
 	ItemServ.get().then(function(data){
 		$scope.groups = data;
 	});
-	$scope.defaultValues = {'sellingUnits': 1,'minimumCustomerAge': 0,'foodStampableFlg':false,'taxStrategyID':101,'department':null};
+	$scope.defaultValues = {'sellingUnits': 1,'minimumCustomerAge': 0,'foodStampableFlg':false,'taxStrategyID':101,'department':null, 'items':[]};
 	$scope.thisGroup = $scope.defaultValues
 
 	$scope.openModal = function() {
@@ -17,7 +17,6 @@ angular.module('pricecheck')
 		if(id==='editGroup'){
 			$scope.thisGroup = $scope.defaultValues;
 		}
-		console.log($scope.thisGroup.department);
 		$scope.modal[id].hide();
 	}
 
@@ -25,10 +24,10 @@ angular.module('pricecheck')
 		$scope.modal.remove();
 	});
 
-	$scope.updateGroup = function(){
-		ItemServ.set($scope.thisGroup);
-		$scope.closeModal('editGroup');
-	}
+	// $scope.updateGroup = function() {
+	// 	ItemServ.set($scope.thisGroup);
+	// 	$scope.closeModal('editGroup');
+	// }
 
 	$scope.deleteGroup = function(id){
 		var confirmPopup = $ionicPopup.confirm({
@@ -44,9 +43,21 @@ angular.module('pricecheck')
 		});
 	}
 
-	$scope.setItemInfo = function(){
-		ItemServ.set($scope.thisGroup);
-		$scope.closeModal('editGroup');
+	$scope.setItemInfo = function(){ 
+		//append new item to the group's item array.
+		if($scope.itemScanned && !$scope.itemFound) {
+			var newItems = ItemServ.getScannedItems();
+			for (var i = 0; i < newItems.length; i++) {
+				$scope.thisGroup.items.push({'posCode':newItems[i],'posCodeFormat':'upcA','posCodeModifier':0});
+			};
+		}
+		ItemServ.set($scope.thisGroup).then(function(){
+			ItemServ.clearScannedItem();
+			$scope.scanData = null;
+			$scope.itemScanned = false;
+			$scope.itemFound = false;
+			$scope.closeModal('editGroup');
+		});
 	}
 
 	$scope.addNewGroup = function(){
@@ -89,21 +100,59 @@ angular.module('pricecheck')
 			}).then(function(modal) {
 				$scope.modal[modal.id] = modal;
 	    		$scope.modal[modal.id].show();
+				if($scope.scanData){
+					$ionicTabsDelegate.select(1);
+				}
 			});
 		});
 	}
 
-	$scope.getItemInfo = function(){
-		$scope.thisItem = {};
-		ItemServ.get($scope.scanData.text).then(function(item){
-		  if(!item){
+	$scope.itemLookup = function(){
+	    ItemServ.getByBarcode($scope.scanData.text).then(function(item){
+	      $scope.thisGroup = item;
+	      $ionicModal.fromTemplateUrl('html/groupEdit.html', {
+	        id:'editGroup',
+	        scope: $scope,
+	        animation: 'slide-in-right'
+	      }).then(function(modal) {
+			$scope.itemFound = true;
+	        $scope.modal[modal.id] = modal;
+	          $scope.modal[modal.id].show();
+	      });
+	    }, function(err){
+	    	if(err.status === 404) {
+				$scope.itemFound = false;
+				ItemServ.addScannedItem($scope.scanData.text);
+    		 	$ionicModal.fromTemplateUrl('html/group.html', {
+			      id:'group',
+			      scope: $scope,
+			      animation: 'slide-in-up'
+			    }).then(function(modal) {
+			      $scope.modal[modal.id] = modal;
+			      $scope.modal[modal.id].show();
+			    });
+	    	};
+		})
+	}
 
-		  }
-		  else {
-		  	var message = "Item already exists " + " in Beer Group " + "."
-		  }
+	$scope.checkIfItemIsAlreadyAdded = function(){
+		ItemServ.getByBarcode($scope.scanData.text).then(function(item){
+		var alertPopup = $ionicPopup.alert({
+		     title: 'Duplicate Item!',
+		     template: 'Scanned item already exists in ' + item.description + ' group.'
+		   });
+		   alertPopup.then(function(res) {
+		     
+		   });
+		},
+		function(err){
+			$scope.thisGroup.items.push({'posCode':$scope.scanData.text,'posCodeFormat':'upcA','posCodeModifier':0});
 		});
 	}
+
+	// $scope.getItemInfo = function(){
+	// 	$scope.thisItem = {};
+	// }
 
 	$scope.removeItem = function(index){
 		var confirmPopup = $ionicPopup.confirm({
@@ -119,7 +168,7 @@ angular.module('pricecheck')
 		});
 	}
 
-	$scope.scan = function(){
+	$scope.addItemToGroup = function(){
 		try {
 		  $ionicPlatform.ready(function() {
 		    $cordovaBarcodeScanner
@@ -127,7 +176,7 @@ angular.module('pricecheck')
 		    .then(function(result) {
 		        $scope.scanData = result;
 		        if(!result.cancelled){
-		          $scope.getItemInfo();
+		          	$scope.checkIfItemIsAlreadyAdded();
 		        }
 		    }, function(error) {
 		        // An error occurred
@@ -136,9 +185,37 @@ angular.module('pricecheck')
 		  });
 		}
 		catch(err) {
-		  $scope.scanData = {}
-		  $scope.scanData.text = "4902430496247";
-		  $scope.getItemInfo();
+			$scope.scanData = {};
+			$scope.scanData.text = Math.floor(Math.random()*100000000);
+			$scope.checkIfItemIsAlreadyAdded();
+		}
+	}
+
+	$scope.scan = function(){
+		try {
+		  $ionicPlatform.ready(function() {
+		    $cordovaBarcodeScanner
+		    .scan()
+		    .then(function(result) {
+		        $scope.scanData = result;
+		        if(!result.cancelled){
+		        	$scope.itemScanned = true;
+		          	$scope.getItemInfo();
+		        }
+		        else {
+		        	$scope.itemScanned = false;
+		        }
+		    }, function(error) {
+		        // An error occurred
+		        $scope.scanResult = 'Error: ' + error;
+		    });
+		  });
+		}
+		catch(err) {
+			$scope.itemScanned = true;
+			$scope.scanData = {};
+			$scope.scanData.text = Math.floor(Math.random()*100000000);
+			$scope.itemLookup();
 		}
 	};
 

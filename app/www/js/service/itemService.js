@@ -3,6 +3,7 @@
 angular.module('pricecheck')
 	.factory('ItemServ', function($q, $http, $cookies, socket, serverAddr) {
 		var items = [];
+		var _tempScannedItems = [];
 		return {
 			 set:function(item) {
 			 	var defer = $q.defer();
@@ -41,11 +42,11 @@ angular.module('pricecheck')
    			},
 			getByBarcode:function(barcode){
 		   		var defer = $q.defer();
-					$http.get(serverAddr + '/api/items/').then(function(response){
+					$http.get(serverAddr + '/api/items/lookup/' + barcode).then(function(response){
 					  var item = response.data;
 					  defer.resolve(item);
 				}, function (err) {
-
+					defer.reject(err);
 				});
    				return defer.promise;
    			},
@@ -63,59 +64,17 @@ angular.module('pricecheck')
 					debugger;
 				});
    				return defer.promise;
+   			},
+   			addScannedItem:function(item){
+   				return _tempScannedItems.push(item);
+   			},
+   			getScannedItems:function(){
+   				return _tempScannedItems;
+   			},
+   			clearScannedItem:function(){
+   				return _tempScannedItems = [];
    			}
 		};
-		// var items = [{'id':1,'name':'20oz Soda','departmentId':'','unit':'','price':'','isTaxable':'','isFoodStampable':'','restriction':'','items':[{'barcode':'123123','barcodeFormat':''},{'barcode':'123123123','barcodeFormat':''},{'barcode':'32342342','barcodeFormat':''},{'barcode':'123123','barcodeFormat':''},{'barcode':'123123123','barcodeFormat':''},{'barcode':'32342342','barcodeFormat':''},{'barcode':'123123','barcodeFormat':''},{'barcode':'123123123','barcodeFormat':''},{'barcode':'32342342','barcodeFormat':''}]},
-		// 			{'id':2,'name':'Candy Small','departmentId':'','unit':'','price':'','isTaxable':'','isFoodStampable':'','restriction':'','items':[{'barcode':'','barcodeFormat':''},{'barcode':'','barcodeFormat':''},{'barcode':'','barcodeFormat':''}]},
-		// 			{'id':3,'name':'Candy Medium','departmentId':'','unit':'','price':'','isTaxable':'','isFoodStampable':'','restriction':'','items':[{'barcode':'','barcodeFormat':''},{'barcode':'','barcodeFormat':''},{'barcode':'','barcodeFormat':''}]},
-		// 			{'id':4,'name':'Candy Large','departmentId':'','unit':'','price':'','isTaxable':'','isFoodStampable':'','restriction':'','items':[{'barcode':'','barcodeFormat':''},{'barcode':'','barcodeFormat':''},{'barcode':'','barcodeFormat':''}]},
-		// 			{'id':5,'name':'Chips Small','departmentId':'','unit':'','price':'','isTaxable':'','isFoodStampable':'','restriction':'','items':[{'barcode':'','barcodeFormat':''},{'barcode':'','barcodeFormat':''},{'barcode':'','barcodeFormat':''}]},
-		// 			{'id':6,'name':'Chips Large','departmentId':'','unit':'','price':'','isTaxable':'','isFoodStampable':'','restriction':'','items':[{'barcode':'','barcodeFormat':''},{'barcode':'','barcodeFormat':''},{'barcode':'','barcodeFormat':''}]},
-		// 			{'id':8,'name':'Starbucks Small','departmentId':'','unit':'','price':'','isTaxable':'','isFoodStampable':'','restriction':'','items':[{'barcode':'','barcodeFormat':''},{'barcode':'','barcodeFormat':''},{'barcode':'','barcodeFormat':''}]},
-		// 			{'id':9,'name':'Starbucks Large','departmentId':'','unit':'','price':'','isTaxable':'','isFoodStampable':'','restriction':'','items':[{'barcode':'','barcodeFormat':''},{'barcode':'','barcodeFormat':''},{'barcode':'','barcodeFormat':''}]},
-		// 			{'id':10,'name':'Single Pack Medicine','departmentId':'','unit':'','price':'','isTaxable':'','isFoodStampable':'','restriction':'','items':[{'barcode':'','barcodeFormat':''},{'barcode':'','barcodeFormat':''},{'barcode':'','barcodeFormat':''}]},
-		// 			{'id':11,'name':'1 Liter Soda','departmentId':'','unit':'','price':'','isTaxable':'','isFoodStampable':'','restriction':'','items':[{'barcode':'','barcodeFormat':''},{'barcode':'','barcodeFormat':''},{'barcode':'','barcodeFormat':''}]},
-		// 			{'id':12,'name':'6 pack Miller','departmentId':'','unit':'','price':'','isTaxable':'','isFoodStampable':'','restriction':'','items':[{'barcode':'','barcodeFormat':''},{'barcode':'','barcodeFormat':''},{'barcode':'','barcodeFormat':''}]},
-		// 			{'id':13,'name':'Single Miller','departmentId':'','unit':'','price':'','isTaxable':'','isFoodStampable':'','restriction':'','items':[{'barcode':'','barcodeFormat':''},{'barcode':'','barcodeFormat':''},{'barcode':'','barcodeFormat':''}]}
-		// 		];
-		// var _id = 4;
-		// return {
-		// 		set:function(item) {
-		// 		   	if(item.id){
-		// 				angular.forEach(items, function(value, key){
-		// 					if(item.id === value.id){
-		// 						items[key] = item;
-		// 						return false;
-		// 					}
-		// 				});
-		// 			}
-		// 			else {
-		// 				_id = _id+1;
-		// 				item.id = _id;
-		// 				items.push(item);
-		// 			}
-		// 			return items;
-		// 	   }, 	
-		// 	   	get:function(posCode){
-		// 	   		var defer = $q.defer();
-	 //   				angular.forEach(items, function(item, key){
-		// 				if(posCode === item.POSCode){
-		// 					defer.resolve(item);
-		// 				}
-		// 			});
-		// 			return defer.promise;
-	 //   			},
-	 //   			remove:function(POSCode){
-	 //   				var defer = $q.defer();
-	 //   				angular.forEach(items, function(item, key){
-		// 				if(POSCode === item.POSCode){
-		// 					items.splice(key, 1);
-		// 					defer.resolve(items);
-		// 				}
-		// 			});
-		// 			return defer.promise;
-	 //   			}
-		// 	};
 	});
 
 // <?xml version="1.0" encoding="UTF-8"?>

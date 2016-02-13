@@ -8,7 +8,7 @@
           </header>
           <ion-content has-header="true" has-footer="true" scroll="true" class="has-header">
             <ion-scroll direction="y" style="height:90vh;">
-              <div class="item  item-input" ng-click="selectDepartment()">
+              <div class="item item-input" ng-click="selectDepartment()">
                 <span class="input-label light-lable">Department</span>
                 <div class="">{{thisGroup.department.merchandiseCodeDescription}}</div>
               </div>
@@ -58,6 +58,7 @@
           </header>
             <ion-content has-header="true" has-footer="true" scroll="true" scrollbar-y="true" class="has-header">
               <ion-scroll direction="y" style="height:71vh;">
+                <ion-item style="color:#3ED473;font-size:inherit;" ng-show="itemScanned && !itemFound">{{scanData.text}}</ion-item>
                 <ion-list show-delete="false" can-swipe="true" delegate-handle="barcodeList">
                   <ion-item can-swipe="true" ng-repeat="item in thisGroup.items track by $index" item="item" class="" ng-href="#">
                     <p>{{item.posCode}}</p>
@@ -68,7 +69,7 @@
             </ion-content>
             <ion-footer-bar style="height:115px !important;">
               <div class="" style="width: 100%;">
-                  <button style="" ng-click="scan()" class="list button bar-footer button-full button-calm">Add New</button>
+                  <button style="" ng-click="addItemToGroup()" class="list button bar-footer button-full button-calm">Add New</button>
                   <button style="" ng-click="setItemInfo()" ng-disabled="form.$invalid || !thisGroup.department" class="list button bar-footer button-full button-balanced">Push Update</button>
               </div>
             </ion-footer-bar>

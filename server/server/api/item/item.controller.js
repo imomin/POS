@@ -117,3 +117,18 @@ export function destroy(req, res) {
     .then(removeEntity(res))
     .catch(handleError(res));
 }
+
+export function lookup(req, res) {
+  var barcode = req.params.barcode;
+  Item.findOneAsync({'items.posCode': {$eq: barcode}})
+    .then(item => {
+      if (!item) {
+        return res.status(404).end();
+      }
+      item.populateAsync('department')
+      .then(function(result){
+        res.status(200).json(result);
+      })
+    })
+    .catch(err => next(err));
+}

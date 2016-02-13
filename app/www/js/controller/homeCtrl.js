@@ -8,7 +8,7 @@ angular.module('pricecheck')
     $scope.scanResults = '';
     $scope.modal = [];
     $scope.thisUser = {};
-    $scope.thisDept = {};
+    //$scope.thisDept = {};
     $scope.thisPromo = {};
     $scope.thisItem = {};
     $scope.thisGroup = {'sellingUnits': 1,'minimumCustomerAge': 0,'foodStampableFlg':false};
@@ -92,18 +92,6 @@ angular.module('pricecheck')
     });
   }
 
-  $scope.addNewDepartment = function(){
-    $scope.thisDept = {};
-    $ionicModal.fromTemplateUrl('html/departmentEdit.html', {
-      id:'editDept',
-      scope: $scope,
-      animation: 'slide-in-up'
-    }).then(function(modal) {
-      $scope.modal[modal.id] = modal;
-      $scope.modal[modal.id].show();
-    });
-  }
-
   $scope.addNewPromotion = function(){
     $scope.thisPromo = {};
     $ionicModal.fromTemplateUrl('html/promotionEdit.html', {
@@ -135,11 +123,11 @@ angular.module('pricecheck')
     $scope.closeModal('editUser');
   }
 
-  $scope.updateDept = function(){
-    DepartmentServ.set($scope.thisDept);
-    $scope.thisDept = {};
-    $scope.closeModal('editDept');
-  }
+  // $scope.updateDept = function(){
+  //   DepartmentServ.set($scope.thisDept);
+  //   $scope.thisDept = {};
+  //   $scope.closeModal('editDept');
+  // }
 
   $scope.updatePromo = function(){
     PromotionServ.set($scope.thisPromo);

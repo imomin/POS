@@ -72,6 +72,10 @@ function removeEntity(res) {
   };
 }
 
+function generateXML(isNew, data){
+
+}
+
 // Gets a list of Items
 export function index(req, res) {
   Item.findAsync()

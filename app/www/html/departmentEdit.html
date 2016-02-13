@@ -17,7 +17,7 @@
 			</ion-toggle>
 		</ion-content>
 		<div class="hide-on-keyboard-open stickyFooter">
-			<button ng-show="thisDept._id" style="" ng-click="deleteDept()" class="button button-full button-assertive">Remove</button>
+			<button ng-show="thisDept._id" style="" ng-click="deleteDept(thisDept._id)" class="button button-full button-assertive">Remove</button>
 			<button style="margin: 0" ng-click="updateDept()" ng-disabled="form.$invalid" class="button button-full button-balanced">Done</button>
 		</div>
 	  <!-- <ion-footer-bar style="">

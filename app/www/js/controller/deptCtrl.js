@@ -5,15 +5,15 @@ angular.module('pricecheck')
 	DepartmentServ.get().then(function(data){
 		$scope.departments = data;
 	});
-	$scope.thisDept = {};
+	$scope.thisDept = {'taxStrategyID':101};
 
 	$scope.openModal = function() {
 		$scope.modal.show();
 	}
 
-	$scope.closeModal = function() {
-		$scope.thisDept = {};
-		$scope.modal.hide();
+	$scope.closeModal = function(id) {
+		$scope.thisDept = {'taxStrategyID':101};
+		$scope.modal[id].hide();
 	}
 
 	$scope.$on('$destroy', function() {
@@ -23,7 +23,7 @@ angular.module('pricecheck')
 
 	$scope.updateDept = function(){
 		DepartmentServ.set($scope.thisDept);
-		$scope.thisDept = {};
+		$scope.thisDept = {'taxStrategyID':101};
 		$scope.closeModal('editDept');
 	}
 
@@ -41,6 +41,18 @@ angular.module('pricecheck')
 		});
 	}
 
+	$scope.addNewDepartment = function(){
+		$scope.thisDept = {'taxStrategyID':101};
+		$ionicModal.fromTemplateUrl('html/departmentEdit.html', {
+		  id:'editDept',
+		  scope: $scope,
+		  animation: 'slide-in-up'
+		}).then(function(modal) {
+		  $scope.modal[modal.id] = modal;
+		  $scope.modal[modal.id].show();
+		});
+	}
+
 	$scope.showDetails = function(department){
 		angular.copy(department, $scope.thisDept );
 		$ionicModal.fromTemplateUrl('html/departmentEdit.html', {
@@ -48,8 +60,8 @@ angular.module('pricecheck')
 		  scope: $scope,
 		  animation: 'slide-in-right'
 		}).then(function(modal) {
-		  $scope.modal = modal;
-		  $scope.modal.show();
+		  $scope.modal[modal.id] = modal;
+		  $scope.modal[modal.id].show();
 		});
 	}
 });

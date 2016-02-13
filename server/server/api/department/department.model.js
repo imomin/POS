@@ -2,6 +2,8 @@
 
 var mongoose = require('bluebird').promisifyAll(require('mongoose'));
 var counter = require('./../counter/counter.model');
+var Promise = require('promise');
+var fs = require('fs');
 
 var DepartmentSchema = new mongoose.Schema({
 	merchandiseCode:{type:Number, unique: true, require: true}, //implement this on Create {$inc: { merchandiseCode: 1} }
@@ -19,7 +21,39 @@ DepartmentSchema.methods = {
    	counter.findByIdAndUpdate({_id: 'departmentMerchandiseCode'}, {$inc: { seq: 1} }, function(error, counter)   {
     	callback(error,counter);
 	});
-  }
+  },
+  generateXMLFile(action, entity) {
+    var template = '<?xml version="1.0" encoding="UTF-8"?>' + 
+      '<NAXML-MaintenanceRequest>' + 
+         '<MerchandiseCodeMaintenance>' + 
+            '<RecordAction type="addchange" />' + 
+            '<MCTDetail>' + 
+               '<RecordAction type="'+ action +'" />' + 
+               '<MerchandiseCode>'+ entity.merchandiseCode +'</MerchandiseCode>' + 
+               '<ActiveFlag value="yes" />' + 
+               '<MerchandiseCodeDescription>'+ entity.merchandiseCodeDescription +'</MerchandiseCodeDescription>' + 
+               '<PaymentSystemsProductCode>400</PaymentSystemsProductCode>' + 
+               '<TaxStrategyID>'+ entity.taxStrategyID +'</TaxStrategyID>' + 
+               '<NegativeFlag value="no" />' + 
+               '<FoodstampableFlg>'+ entity.foodStampableFlg +'</FoodstampableFlg>' + 
+               '<DiscountableFlg>1</DiscountableFlg>' + 
+               '<DepartmentKeyAtPOS>0</DepartmentKeyAtPOS>' + 
+            '</MCTDetail>' + 
+         '</MerchandiseCodeMaintenance>' + 
+      '</NAXML-MaintenanceRequest>';
+      return new Promise(function (resolve, reject) {
+          fs.writeFile(__dirname + '/../../../inBox/'+Math.floor(Math.random()*100000000)+'.xml', template, 'utf8', function(err) {
+            console.log("done writing");
+            if (err) {
+				console.log(err);
+				reject(err);
+            }
+            else {
+            	resolve(entity);
+            }
+          });
+      });
+  	}
 }
 export default mongoose.model('Department', DepartmentSchema);
 

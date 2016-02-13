@@ -11,10 +11,13 @@
 
 import _ from 'lodash';
 var Department = require('./department.model');
+var Promise = require('promise');
+var fs = require('fs');
 
 function handleError(res, statusCode) {
   statusCode = statusCode || 500;
   return function(err) {
+    console.log(err);
     res.status(statusCode).send(err);
   };
 }
@@ -22,6 +25,8 @@ function handleError(res, statusCode) {
 function responseWithResult(res, statusCode) {
   statusCode = statusCode || 200;
   return function(entity) {
+    console.log("test");
+    console.log(entity);
     if (entity) {
       res.status(statusCode).json(entity);
     }
@@ -46,6 +51,14 @@ function saveUpdates(updates) {
         return updated;
       });
   };
+}
+
+function generateXMLFile(action) {
+  return function(entity) {
+    return entity.generateXMLFile(action, entity).then(entity => {
+      return entity;
+    });
+  }
 }
 
 function removeEntity(res) {
@@ -74,6 +87,12 @@ export function show(req, res) {
     .catch(handleError(res));
 }
 
+export function create(req, res) {
+  Thing.createAsync(req.body)
+    .then(responseWithResult(res, 201))
+    .catch(handleError(res));
+}
+
 
 // Creates a new Department in the DB
 export function create(req, res) {
@@ -81,6 +100,7 @@ export function create(req, res) {
   newDepartment.getNextId(function(err, counter){
       newDepartment.merchandiseCode = counter.seq;
       Department.createAsync(newDepartment)
+      .then(generateXMLFile('create'))
       .then(responseWithResult(res, 201))
       .catch(handleError(res));
   });
@@ -94,14 +114,17 @@ export function update(req, res) {
   Department.findByIdAsync(req.params.id)
     .then(handleEntityNotFound(res))
     .then(saveUpdates(req.body))
+    .then(generateXMLFile('addchange'))
     .then(responseWithResult(res))
     .catch(handleError(res));
 }
 
 // Deletes a Department from the DB
 export function destroy(req, res) {
+  console.log(req.body);
   Department.findByIdAsync(req.params.id)
     .then(handleEntityNotFound(res))
+    .then(generateXMLFile('delete'))
     .then(removeEntity(res))
     .catch(handleError(res));
 }

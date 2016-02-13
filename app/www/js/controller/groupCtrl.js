@@ -32,7 +32,7 @@ angular.module('pricecheck')
 	$scope.deleteGroup = function(id){
 		var confirmPopup = $ionicPopup.confirm({
 		    title: 'Delete Group',
-		    template: 'Are you sure you want to delete this group? \n  there are X items in this group.'
+		    template: 'Are you sure you want to delete this group? \n  there are ' + $scope.thisGroup.items.length + ' items in this group.'
 		});
 
 		confirmPopup.then(function(res) {

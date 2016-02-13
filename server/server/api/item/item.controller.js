@@ -28,16 +28,32 @@ function responseWithResult(res, statusCode) {
   };
 }
 
-function responseWithDepartmentInResult(res, statusCode) {
-  statusCode = statusCode || 200;
-  return function(entity) {
+// function responseWithDepartmentInResult(res, statusCode) {
+//   statusCode = statusCode || 200;
+//   return function(entity) {
+//     if (entity) {
+//       entity.populateAsync('department')
+//       .then(function(result){
+//         res.status(statusCode).json(result);
+//       })
+//     }
+//   };
+// }
+
+function populateDepartment(){
+  return function(entity){
     if (entity) {
-      entity.populateAsync('department')
-      .then(function(result){
-        res.status(statusCode).json(result);
-      })
-    }
-  };
+      return entity.populateAsync('department')
+    };
+  }
+}
+
+function generateXMLFile(action) {
+  return function(entity) {
+    return entity.generateXMLFile(action, entity).then(entity => {
+      return entity;
+    });
+  }
 }
 
 function handleEntityNotFound(res) {
@@ -72,10 +88,6 @@ function removeEntity(res) {
   };
 }
 
-function generateXML(isNew, data){
-
-}
-
 // Gets a list of Items
 export function index(req, res) {
   Item.findAsync()
@@ -87,7 +99,8 @@ export function index(req, res) {
 export function show(req, res) {
   Item.findByIdAsync(req.params.id)
     .then(handleEntityNotFound(res))
-    .then(responseWithDepartmentInResult(res))
+    .then(populateDepartment())
+    .then(responseWithResult(res))
     .catch(handleError(res));
 }
 
@@ -97,6 +110,7 @@ export function create(req, res) {
   newItem.getNextId(function(err, counter){
       newItem.itemID = counter.seq;
       Item.createAsync(newItem)
+        .then(generateXMLFile('create'))
         .then(responseWithResult(res, 201))
         .catch(handleError(res));
       });
@@ -110,6 +124,8 @@ export function update(req, res) {
   Item.findByIdAsync(req.params.id)
     .then(handleEntityNotFound(res))
     .then(saveUpdates(req.body))
+    .then(populateDepartment())
+    .then(generateXMLFile('addchange'))
     .then(responseWithResult(res))
     .catch(handleError(res));
 }
@@ -118,6 +134,7 @@ export function update(req, res) {
 export function destroy(req, res) {
   Item.findByIdAsync(req.params.id)
     .then(handleEntityNotFound(res))
+    .then(generateXMLFile('delete'))
     .then(removeEntity(res))
     .catch(handleError(res));
 }

@@ -5,14 +5,16 @@ angular.module('pricecheck')
 		return {
 			isServerAvailabel: function(){
 				var defer = $q.defer();
-				$http.get(serverAddr + '/api/employees/count',{timeout:defer.promise}).then(function(count){
+				$http.get(serverAddr + '/api/employees/count',{timeout:defer.promise}).then(
+				function(count){
 					defer.resolve(count);
 				}, function (err) {
-					defer.resolve(err);
+					console.log(JSON.stringify(err));
+					defer.reject(err);
 				});
-				  $timeout(function() {
-				    defer.resolve({"data":{"count":-1}}); // this aborts the request!
-				  }, 10000);
+				  // $timeout(function() {
+				  //   defer.resolve({"data":{"count":-1}}); // this aborts the request!
+				  // }, 5000);
 				return defer.promise;
 			},
 			isDeviceAdded: function(deviceId){

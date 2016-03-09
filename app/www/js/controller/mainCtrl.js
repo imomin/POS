@@ -9,7 +9,9 @@ angular.module('pricecheck')
         var deviceId = "811536972167970e";
       }
       AuthServ.isServerAvailabel().then(function(response){
+        console.log('*********');
         console.log(response);
+        console.log('*********');
         if(response.data.count === -1){
           var alertPopup = $ionicPopup.alert({
             title: 'Connection Error',
@@ -60,12 +62,15 @@ angular.module('pricecheck')
         }
       },
       function(err){
+        console.log('##########');
+        console.log(err);
+        console.log('##########');
         var alertPopup = $ionicPopup.alert({
            title: 'Connection Error',
            template: 'Problem Connecting to the server!'
          });
          alertPopup.then(function(res) {
-           
+           ionic.Platform.exitApp();
          });
       });
     //CHECK IF PIUI Is AVAILABLE (https://github.com/dps/piui)

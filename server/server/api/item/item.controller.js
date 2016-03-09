@@ -28,17 +28,6 @@ function responseWithResult(res, statusCode) {
   };
 }
 
-// function responseWithDepartmentInResult(res, statusCode) {
-//   statusCode = statusCode || 200;
-//   return function(entity) {
-//     if (entity) {
-//       entity.populateAsync('department')
-//       .then(function(result){
-//         res.status(statusCode).json(result);
-//       })
-//     }
-//   };
-// }
 
 function populateDepartment(){
   return function(entity){

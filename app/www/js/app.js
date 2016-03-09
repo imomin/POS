@@ -4,7 +4,7 @@
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 angular.module('pricecheck', ['ionic','ngCordova','ngCookies','btford.socket-io'])
-.constant('serverAddr','http://192.168.1.133:9000')
+.constant('serverAddr','http://pibox:8080')
 .factory('deviceInfo', function () {
     var _uuid = "";
     return {
@@ -22,33 +22,32 @@ angular.module('pricecheck', ['ionic','ngCordova','ngCookies','btford.socket-io'
         .state('error', {name: 'error', url: '/error', templateUrl: 'html/error.html'})
     ;
     $urlRouterProvider.otherwise('/');
-    //   var link = document.createElement("script");
-    //   link.src =  serverAddr +'/socket.io-client/socket.io.js';
-    //   var refTag = document.getElementsByTagName("title")[0];
-    //   refTag.parentNode.insertBefore(link,refTag);
 })
 
 .run(function($rootScope,$ionicPlatform,$cordovaDevice,$cordovaSplashscreen,$cordovaNetwork,$ionicPopup,deviceInfo) {
   $ionicPlatform.ready(function() {
-      //$cordovaSplashscreen.hide();
-      try {
-        deviceInfo.setId($cordovaDevice.getUUID());
-      }
-      catch (err){
-        deviceInfo.setId("811536972167970e");
-      }
 
-      // if ($cordovaNetwork.isOffline()) {
-      //     $ionicPopup.confirm({
-      //         title: "Internet Disconnected",
-      //         content: "The internet is disconnected on your device."
-      //     })
-      //     .then(function(result) {
-      //         if(!result) {
-      //             ionic.Platform.exitApp();
-      //         }
-      //     });
-      // }
+    $cordovaSplashscreen.hide();
+
+    // if ($cordovaNetwork.isOffline()) {
+    //     $ionicPopup.confirm({
+    //         title: "Connection Error",
+    //         content: "Cannot find the server."
+    //     })
+    //     .then(function(result) {
+    //         if(!result) {
+    //             ionic.Platform.exitApp();
+    //         }
+    //     });
+    // }
+
+    try {
+      deviceInfo.setId($cordovaDevice.getUUID());
+    }
+    catch (err){
+      deviceInfo.setId("811536972167970e");
+    }
+
     //$cordovaSplashscreen.hide();
     if(window.cordova && window.cordova.plugins.Keyboard) {
       // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard

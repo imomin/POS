@@ -5,25 +5,84 @@ var Schema = mongoose.Schema;
 var counter = require('./../counter/counter.model');
 var Promise = require('promise');
 var fs = require('fs');
+import config from '../../config/environment';
+
+// var ItemSchema = new mongoose.Schema({
+//   itemID: {type:Number, unique: true, require: true}, // PLU implement this on Create {$inc: { itemID: 1} }
+//   items:[{posCode:{type:Number},posCodeFormat:{type:String},posCodeModifier:{type:Number,default: 0}}], //[{ posCode: String, posCodeFormat: String,  posCodeModifier: Number,}]
+//   activeFlag: {type:Boolean, default: true},
+//   merchandiseCode: {type:Number, require: true},
+//   regularSellPrice: {type:Number, require: true},
+//   description: {type:String, require: true},
+//   paymentSystemsProductCode: {type:Number, default: 400},
+//   sellingUnits: {type:Number, default: 1},
+//   pricingGroup: {type:Number, default: 0},
+//   quantityAllowedFlg: {type:Boolean, default: true},
+//   quantityRequiredFlg:  {type:Boolean, default: false},
+//   discountableFlg: {type:Boolean, default: true},
+//   foodStampableFlg: {type:Boolean, default: false},
+//   priceRequiredFlg: {type:Boolean, default: false},
+//   minimumCustomerAge: {type: Number, enum: [0, 1001, 1002]}, // none, 18+ = 1001, 21+ = 1002
+//   taxStrategyID: {type: Number, enum: [101, 99]}, //101=taxable, 99=non-taxable
+//   department: {type:Schema.Types.ObjectId, ref: 'Department', required:true}
+// });
 
 var ItemSchema = new mongoose.Schema({
-  itemID: {type:Number, unique: true, require: true}, // PLU implement this on Create {$inc: { itemID: 1} }
-  items:[{posCode:{type:Number},posCodeFormat:{type:String},posCodeModifier:{type:Number,default: 0}}], //[{ posCode: String, posCodeFormat: String,  posCodeModifier: Number,}]
-  activeFlag: {type:Boolean, default: true},
-  merchandiseCode: {type:Number, require: true},
-  regularSellPrice: {type:Number, require: true},
-  description: {type:String, require: true},
-  paymentSystemsProductCode: {type:Number, default: 400},
-  sellingUnits: {type:Number, default: 1},
-  pricingGroup: {type:Number, default: 0},
-  quantityAllowedFlg: {type:Boolean, default: true},
-  quantityRequiredFlg:  {type:Boolean, default: false},
-  discountableFlg: {type:Boolean, default: true},
-  foodStampableFlg: {type:Boolean, default: false},
-  priceRequiredFlg: {type:Boolean, default: false},
-  minimumCustomerAge: {type: Number, enum: [0, 1001, 1002]}, // none, 18+ = 1001, 21+ = 1002
-  taxStrategyID: {type: Number, enum: [101, 99]}, //101=taxable, 99=non-taxable
-  department: {type:Schema.Types.ObjectId, ref: 'Department', required:true}
+  RecordAction: {"@":{"type":{type: String, default:"addchange"}}},
+  ItemCode: {"POSCodeFormat":{"@":{format:String}},POSCode:String,posCodeModifier:{type:Number,default:0},InventoryItemID:String},
+  ITTData: {
+    MerchandiseCode: {type:Number, require: true},
+    RegularSellPrice: {type:Number, require: true},
+    Description:{type:String, require: true},
+    ItemID: {type:Number, require: true, unique: false},
+    PricingGroup: {type:Number, require: false, default:0},
+    PaymentSystemsProductCode:{type:Number, default: 400},
+    SellingUnits: {type:Number, default: 1},
+    TaxStrategyID:  {type: Number, enum: [101, 99]}, //101=taxable, 99=non-taxable
+    SalesRestriction: {
+      ProhibitDiscountFlag: {
+        "@": {
+          value: String
+        }
+      },
+      MinimumCustomerAge: Number
+    },
+    ItemType: {
+      ItemTypeCode: {type:String,default:"mdse"},
+      ItemTypeSubCode: {type:String,default:"mdse"}
+    },
+    PriceRequiredFlg: {
+      "@": {
+        "value": {type:String, default:"no"}
+      }
+    },
+    FoodStampableFlg: {
+      "@": {
+        "value": {type:String, default:"no"}
+      }
+    },
+    DiscountableFlg: {
+      "@": {
+        "value": {type:String, default:"yes"}
+      }
+    },
+    QuantityAllowedFlg: {
+      "@": {
+        "value":{type:String, default:"yes"}
+      }
+    },
+    QuantityRequiredFlg: {
+      "@": {
+        "value": {type:String, default:"no"}
+      }
+    },
+    ActiveFlag: {
+      "@": {
+        "value": {type:String, default:"yes"}
+      }
+    }
+  }
+  ,department: {type:Schema.Types.ObjectId, ref: 'Merchandisecode', required:true}
 });
 
 ItemSchema.methods = {
@@ -68,7 +127,8 @@ ItemSchema.methods = {
         template = template + '</ItemMaintenance>'+
                     '</NAXML-MaintenanceRequest>';
       return new Promise(function (resolve, reject) {
-          fs.writeFile(__dirname + '/../../../inBox/'+Math.floor(Math.random()*100000000)+'.xml', template, 'utf8', function(err) {
+          console.log(config.xmlDistPath);
+          fs.writeFile(config.xmlDistPath +Math.floor(Math.random()*100000000)+'.xml', template, 'utf8', function(err) {
             console.log("done writing");
             if (err) {
               console.log(err);
@@ -106,6 +166,78 @@ export default mongoose.model('Item', ItemSchema);
 //   description: 'Blah',
 //   regularSellPrice: 1.99,
 //   _id: 56be76f4a7c562d01a8471c2 }
+
+
+// {
+  //         "RecordAction": {
+  //           "$": {
+  //             "type": "addchange"
+  //           }
+  //         },
+  //         "ItemCode": {
+  //           "POSCodeFormat": {
+  //             "$": {
+  //               "format": "upcA"
+  //             }
+  //           },
+  //           "POSCode": "012300197410",
+  //           "POSCodeModifier": "0",
+  //           "InventoryItemID": ""
+  //         },
+  //         "ITTData": {
+  //           "MerchandiseCode": "6",
+  //           "RegularSellPrice": "6.59",
+  //           "Description": "Camel",
+  //           "ItemID": "0",
+  //           "PricingGroup": "0",
+  //           "PaymentSystemsProductCode": "400",
+  //           "SellingUnits": "1",
+  //           "TaxStrategyID": "101",
+  //           "SalesRestriction": {
+  //             "ProhibitDiscountFlag": {
+  //               "$": {
+  //                 "value": "no"
+  //               }
+  //             },
+  //             "MinimumCustomerAge": "1001"
+  //           },
+  //           "ItemType": {
+  //             "ItemTypeCode": "mdse",
+  //             "ItemTypeSubCode": "mdse"
+  //           },
+  //           "PriceRequiredFlg": {
+  //             "$": {
+  //               "value": "no"
+  //             }
+  //           },
+  //           "FoodStampableFlg": {
+  //             "$": {
+  //               "value": "no"
+  //             }
+  //           },
+  //           "DiscountableFlg": {
+  //             "$": {
+  //               "value": "no"
+  //             }
+  //           },
+  //           "QuantityAllowedFlg": {
+  //             "$": {
+  //               "value": "yes"
+  //             }
+  //           },
+  //           "QuantityRequiredFlg": {
+  //             "$": {
+  //               "value": "no"
+  //             }
+  //           }
+  //           "ActiveFlag": {
+  //             "$": {
+  //               "value": "yes"
+  //             }
+  //           },
+  //         }
+  //       }
+
 
 // <ItemMaintenance>
 //     <RecordAction type="addchange"/>

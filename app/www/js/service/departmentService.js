@@ -9,12 +9,18 @@ angular.module('pricecheck')
 				 	if(department._id){
 				 		$http.put(serverAddr + '/api/departments/'+department._id, department).then(function(response){
 				 			defer.resolve(response);
-				 		});
+				 		}, function (err) {
+							console.log(JSON.stringify(err));
+							defer.reject(err);
+						});
 				 	}
 				 	else {
 				 		$http.post(serverAddr + '/api/departments/', department).then(function(response){
 				 			defer.resolve(response);
-				 		});
+				 		}, function (err) {
+							console.log(JSON.stringify(err));
+							defer.reject(err);
+						});
 				 	}
 				 	return defer.promise;
 			   }, 	
@@ -25,7 +31,7 @@ angular.module('pricecheck')
 					  defer.resolve(departments);
 					  socket.syncUpdates('department', departments);
 					}, function (err) {
-
+						defer.reject(err);
 					});
 	   				return defer.promise;
 	   			},
@@ -34,16 +40,17 @@ angular.module('pricecheck')
 	   			},
 	   			distroySync:function(){
 	   				socket.unsyncUpdates('department');
-	   			},
-	   			validateAccessCode:function(accessCode){
-	   				var defer = $q.defer();
-   					$http.get(serverAddr + '/api/departments').then(function(response){
-					  debugger;
-					}, function (err) {
-						debugger;
-					});
-	   				return defer.promise;
 	   			}
+	   	// 		,
+	   	// 		validateAccessCode:function(accessCode){
+	   	// 			var defer = $q.defer();
+   		// 			$http.get(serverAddr + '/api/departments').then(function(response){
+					//   debugger;
+					// }, function (err) {
+					// 	debugger;
+					// });
+	   	// 			return defer.promise;
+	   	// 		}
 			};
 	});
 	// .factory('DepartmentServ', function($q) {

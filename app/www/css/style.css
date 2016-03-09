@@ -29,6 +29,11 @@ ion-scroll[direction=y] {
     color:#B1B1B1;
 }
 
+.item.activated {
+    border-color: #ccc;
+    background-color: #BFBFBF;
+}
+
 /*.tabs-top > .tabs, .tabs.tabs-top {
   top:0px !important;
 }

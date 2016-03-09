@@ -40,6 +40,8 @@ var all = {
       }
     }
   },
+  //sudo mount -t cifs -o user=BackOffice,password=BackOffice //10.5.60.1/ XMLGateway
+  xmlDistPath: '~/XMLGateway/outbox',
 
   facebook: {
     clientID:     process.env.FACEBOOK_ID || 'id',

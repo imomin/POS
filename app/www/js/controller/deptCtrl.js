@@ -22,7 +22,20 @@ angular.module('pricecheck')
 	});
 
 	$scope.updateDept = function(){
-		DepartmentServ.set($scope.thisDept);
+		DepartmentServ.set($scope.thisDept).then(function(res){
+
+		},function(err){
+			console.log(err);
+			if(err.data.code === "ENOENT"){
+				var alertPopup = $ionicPopup.alert({
+				     title: 'Data Push Failed!',
+				     template: 'Unable to communicate to POS system. Changes not pushed.'
+				   });
+				   alertPopup.then(function(res) {
+				     
+				   });
+			}
+		});
 		$scope.thisDept = {'taxStrategyID':101};
 		$scope.closeModal('editDept');
 	}

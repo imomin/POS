@@ -4,6 +4,7 @@ var mongoose = require('bluebird').promisifyAll(require('mongoose'));
 var counter = require('./../counter/counter.model');
 var Promise = require('promise');
 var fs = require('fs');
+import config from '../../config/environment';
 
 var DepartmentSchema = new mongoose.Schema({
 	merchandiseCode:{type:Number, unique: true, require: true}, //implement this on Create {$inc: { merchandiseCode: 1} }
@@ -42,7 +43,8 @@ DepartmentSchema.methods = {
          '</MerchandiseCodeMaintenance>' + 
       '</NAXML-MaintenanceRequest>';
       return new Promise(function (resolve, reject) {
-          fs.writeFile(__dirname + '/../../../inBox/'+Math.floor(Math.random()*100000000)+'.xml', template, 'utf8', function(err) {
+        console.log(config.xmlDistPath);
+          fs.writeFile(config.xmlDistPath+Math.floor(Math.random()*100000000)+'.xml', template, 'utf8', function(err) {
             console.log("done writing");
             if (err) {
 				console.log(err);

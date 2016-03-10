@@ -6,7 +6,6 @@ angular.module('pricecheck')
 		$scope.departments = data;
 	});
 	$scope.thisDept = {'taxStrategyID':101};
-
 	$scope.openModal = function() {
 		$scope.modal.show();
 	}
@@ -23,7 +22,8 @@ angular.module('pricecheck')
 
 	$scope.updateDept = function(){
 		DepartmentServ.set($scope.thisDept).then(function(res){
-
+			$scope.thisDept = {'taxStrategyID':101};
+			$scope.closeModal('editDept');
 		},function(err){
 			console.log(err);
 			if(err.data.code === "ENOENT"){
@@ -36,8 +36,6 @@ angular.module('pricecheck')
 				   });
 			}
 		});
-		$scope.thisDept = {'taxStrategyID':101};
-		$scope.closeModal('editDept');
 	}
 
 	$scope.deleteDept = function(id){
@@ -48,14 +46,23 @@ angular.module('pricecheck')
 
 		confirmPopup.then(function(res) {
 		  if(res) {
-		    DepartmentServ.remove(id);
-		    $scope.closeModal('editDept');
+		    DepartmentServ.remove(id).then(function(res){
+		    	$scope.closeModal('editDept');
+		    },function(err){
+		    	var alertPopup = $ionicPopup.alert({
+				     title: 'Remove Data Failed!',
+				     template: 'Department not removed.'
+				   });
+				   alertPopup.then(function(res) {
+						$scope.closeModal('editDept');
+				   });
+		    });
 		  }
 		});
 	}
 
 	$scope.addNewDepartment = function(){
-		$scope.thisDept = {'taxStrategyID':101};
+		$scope.thisDept = {'MerchandiseCodeDescription':'','TaxStrategyID':101,'NegativeFlag':{'@':{'value':'no'}},'ActiveFlag':{'@':{'value':'yes'}},'DepartmentKeyAtPOS':1,'DiscountableFlg':false,'FoodStampableFlg':false,'PaymentSystemsProductCode':400};
 		$ionicModal.fromTemplateUrl('html/departmentEdit.html', {
 		  id:'editDept',
 		  scope: $scope,
@@ -67,7 +74,7 @@ angular.module('pricecheck')
 	}
 
 	$scope.showDetails = function(department){
-		angular.copy(department, $scope.thisDept );
+		angular.copy(department, $scope.thisDept);
 		$ionicModal.fromTemplateUrl('html/departmentEdit.html', {
 		  id:'editDept',
 		  scope: $scope,

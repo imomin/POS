@@ -7,16 +7,22 @@ angular.module('pricecheck')
 				 set:function(department) {
 				 	var defer = $q.defer();
 				 	if(department._id){
-				 		$http.put(serverAddr + '/api/departments/'+department._id, department).then(function(response){
-				 			defer.resolve(response);
+				 		$http.put(serverAddr + '/api/merchandisecodes/'+department._id, department).then(function(response){
+							angular.forEach(departments, function(value, key){
+								if(department._id === value._id){
+									departments[key] = response.data;
+									defer.resolve(departments[key]);
+								}
+							});
 				 		}, function (err) {
 							console.log(JSON.stringify(err));
 							defer.reject(err);
 						});
 				 	}
 				 	else {
-				 		$http.post(serverAddr + '/api/departments/', department).then(function(response){
-				 			defer.resolve(response);
+				 		$http.post(serverAddr + '/api/merchandisecodes/', department).then(function(response){
+				 			departments.push(response.data);
+				 			defer.resolve(department);
 				 		}, function (err) {
 							console.log(JSON.stringify(err));
 							defer.reject(err);
@@ -26,7 +32,7 @@ angular.module('pricecheck')
 			   }, 	
 			   	get:function(){
 			   		var defer = $q.defer();
-   					$http.get(serverAddr + '/api/departments').then(function(response){
+   					$http.get(serverAddr + '/api/merchandisecodes').then(function(response){
 					  departments = response.data;
 					  defer.resolve(departments);
 					  socket.syncUpdates('department', departments);
@@ -36,7 +42,19 @@ angular.module('pricecheck')
 	   				return defer.promise;
 	   			},
 	   			remove:function(_id){
-	   				$http.delete(serverAddr + '/api/departments/' + _id);
+	   				var defer = $q.defer();
+	   				$http.delete(serverAddr + '/api/merchandisecodes/' + _id).then(function(response){
+	   					angular.forEach(departments, function(department, key){
+							if(_id === department._id){
+								departments.splice(key, 1);
+								defer.resolve(departments);
+							}
+						});
+	   					defer.resolve(response);
+	   				}, function (err) {
+						defer.reject(err);
+					});
+	   				return defer.promise;
 	   			},
 	   			distroySync:function(){
 	   				socket.unsyncUpdates('department');

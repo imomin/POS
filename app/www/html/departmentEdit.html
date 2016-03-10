@@ -6,13 +6,13 @@
 		</ion-header-bar>
 		<ion-content>
 			<label class="item item-input">
-				<input type="text" name="name" ng-model="thisDept.merchandiseCodeDescription" placeholder="Name" required="true" autocomplete="off">
+				<input type="text" name="name" ng-model="thisDept.MerchandiseCodeDescription" placeholder="Name" required="true" autocomplete="off">
 				<i ng-show="form.name.$error.required" class="icon ion-alert-circled assertive col col-10"></i>
 			</label>
-	        <ion-toggle ng-model="thisDept.taxStrategyID" ng-true-value="101" ng-false-value="99">
+	        <ion-toggle ng-model="thisDept.TaxStrategyID" ng-true-value="101" ng-false-value="99">
 				<span class="light-lable">Taxable?</span>
 	        </ion-toggle>
-			<ion-toggle ng-model="thisDept.foodStampableFlg">
+			<ion-toggle ng-model="thisDept.DiscountableFlg">
 				<span class="light-lable">Food Stampable?</span>
 			</ion-toggle>
 		</ion-content>

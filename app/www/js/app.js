@@ -4,7 +4,7 @@
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 angular.module('pricecheck', ['ionic','ngCordova','ngCookies','btford.socket-io'])
-.constant('serverAddr','http://pibox:8080')
+.constant('serverAddr','http://localhost:9000')
 .factory('deviceInfo', function () {
     var _uuid = "";
     return {

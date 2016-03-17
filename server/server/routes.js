@@ -9,6 +9,7 @@ import path from 'path';
 
 export default function(app) {
   // Insert routes below
+  app.use('/api/ittdata', require('./api/ittdata'));
   app.use('/api/merchandisecodes', require('./api/merchandisecode'));
   app.use('/api/discounts', require('./api/discount'));
   app.use('/api/taxes', require('./api/tax'));

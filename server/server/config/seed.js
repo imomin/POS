@@ -15,6 +15,9 @@ Counter.count({})
       }, {
         _id: 'itemID',
         seq: 1000
+      }, {
+        _id: 'inventoryItemID',
+        seq: 10000
       })
       .then(() => {
         console.log('finished populating Counter');

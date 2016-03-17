@@ -142,3 +142,37 @@ export function lookup(req, res) {
     })
     .catch(err => next(err));
 }
+
+// Gets a list of Merchandisecodes group by name and itemId
+export function group(req, res) {
+    Item.aggregateAsync([
+        {$group:{"_id":{ItemID: "$ITTData.ItemID", Description: "$ITTData.Description"}}},
+        {$sort:{"_id.Description":1}}
+      ])
+    .then(responseWithResult(res))
+    .catch(handleError(res));
+}
+
+// Gets a list of Merchandisecodes by itemId
+export function groupByItemId(req, res) {
+  Item.findAsync({'ITTData.ItemID':req.params.itemid})
+    .then(handleEntityNotFound(res))
+    .then(data => {
+      var itemData = [];
+      var counter = 0;
+      _.forEach(data, function(value, key){
+        data[key].populateAsync('department')
+        .then(extendedData => {
+          itemData.push(extendedData);
+          counter = counter + 1;
+          if(counter === data.length){
+            res.status(200).json(itemData);
+          }
+        })
+        .catch(handleError(res));
+        console.log(data[key]);
+      })
+    })
+    //.then(responseWithResult(res))
+    .catch(handleError(res));
+}

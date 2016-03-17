@@ -39,6 +39,6 @@ function startServer() {
 }
 
 setImmediate(startServer);
-require('./importTool/exportData');
+//require('./importTool/importData');
 // Expose app
 exports = module.exports = app;

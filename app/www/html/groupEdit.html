@@ -4,40 +4,40 @@
         <ion-tab title="Group" icon-on="ion-ios-albums" icon-off="ion-ios-albums-outline">
          <header class="bar bar-header">
             <button class="button button-icon icon ion-ios-arrow-back" ng-click="closeModal('editGroup')"></button>
-            <h1 class="title">{{thisGroup.description}} Group</h1>
+            <h1 class="title">{{thisGroup.Description}} Group</h1>
           </header>
           <ion-content has-header="true" has-footer="true" scroll="true" class="has-header">
             <ion-scroll direction="y" style="height:90vh;">
               <div class="item item-input" ng-click="selectDepartment()">
                 <span class="input-label light-lable">Department</span>
-                <div class="">{{thisGroup.department.merchandiseCodeDescription}}</div>
+                <div class="">{{thisGroup.MerchandiseCodeDetails.MerchandiseCodeDescription}}</div>
               </div>
               <label class="item item-input">
                 <span class="input-label light-lable">Name</span>
-                <input type="text" name="name" ng-model="thisGroup.description" placeholder="Name" required="true" autocomplete="off">
+                <input type="text" name="name" ng-model="thisGroup.Description" placeholder="Name" required="true" autocomplete="off">
                 <i ng-show="form.name.$error.required" class="icon ion-alert-circled assertive col col-10"></i>
               </label>
               <label class="item item-input">
                 <span class="input-label light-lable">Units</span>
-                <input min="1" type="number" name="unit" ng-model="thisGroup.sellingUnits" placeholder="Units" required="true" autocomplete="off">
+                <input min="1" type="number" name="unit" ng-model="thisGroup.SellingUnits" placeholder="Units" required="true" autocomplete="off">
                 <i ng-show="form.unit.$error.required" class="icon ion-alert-circled assertive col col-10"></i>
               </label>
               <label class="item item-input">
                 <span class="input-label light-lable">Price $</span>
-                <input min=".10" type="number" name="price" ng-model="thisGroup.regularSellPrice" placeholder="Price" required="true" autocomplete="off">
+                <input min=".10" type="number" name="price" ng-model="thisGroup.RegularSellPrice" placeholder="Price" required="true" autocomplete="off">
                 <i ng-show="form.price.$error.required" class="icon ion-alert-circled assertive col col-10"></i>
               </label>        
-              <ion-toggle ng-model="thisGroup.taxStrategyID" ng-true-value="101" ng-false-value="99">
+              <ion-toggle ng-model="thisGroup.TaxStrategyID" ng-true-value="101" ng-false-value="99">
                 <span class="light-lable">Taxable?</span>
               </ion-toggle>
-              <ion-toggle ng-model="thisGroup.isFoodStampable">
+              <ion-toggle ng-model="thisGroup.FoodStampableFlg['@'].value">
                 <span class="light-lable">Food Stampable Item?</span>
               </ion-toggle>
               <div class="item item-input list list-inline" style="padding: 0px 0px 0px 16px;">
                   <span class="input-label light-lable">Restriction</span>
-                  <ion-radio icon="" ng-value="0" ng-model="thisGroup.minimumCustomerAge">None</ion-radio>
-                  <ion-radio icon="" ng-value="1001" ng-model="thisGroup.minimumCustomerAge">18+</ion-radio>
-                  <ion-radio icon="" ng-value="1002" ng-model="thisGroup.minimumCustomerAge">21+</ion-radio>
+                  <ion-radio icon="" ng-value="0" ng-model="thisGroup.SalesRestriction.MinimumCustomerAge">None</ion-radio>
+                  <ion-radio icon="" ng-value="1001" ng-model="thisGroup.SalesRestriction.MinimumCustomerAge">18+</ion-radio>
+                  <ion-radio icon="" ng-value="1002" ng-model="thisGroup.SalesRestriction.MinimumCustomerAge">21+</ion-radio>
               </div>
             </ion-scroll>
           </ion-content>
@@ -47,7 +47,7 @@
 
                   <button ng-show="!thisGroup._id" style="" ng-click="closeModal('editGroup')" class="list button bar-footer button-full button-assertive">Cancel</button>
               
-                  <button style="" ng-click="setItemInfo()" ng-disabled="form.$invalid || !thisGroup.department" class="list button bar-footer button-full button-balanced">Push Update</button>
+                  <button style="" ng-click="setItemInfo()" ng-disabled="form.$invalid || !thisGroup.MerchandiseCodeDetails" class="list button bar-footer button-full button-balanced">Push Update</button>
               </div>
           </ion-footer-bar>
        </ion-tab>
@@ -61,7 +61,7 @@
                 <ion-item style="color:#3ED473;font-size:inherit;" ng-show="itemScanned && !itemFound">{{scanData.text}}</ion-item>
                 <ion-list show-delete="false" can-swipe="true" delegate-handle="barcodeList">
                   <ion-item can-swipe="true" ng-repeat="item in thisGroup.items track by $index" item="item" class="" ng-href="#">
-                    <p>{{item.posCode}}</p>
+                    <p>{{item.ItemCode.POSCode}}</p>
                     <ion-option-button class="button-assertive icon ion-trash-a" ng-click="removeItem($index)"></ion-option-button>
                   </ion-item>
                 </ion-list>
@@ -70,7 +70,7 @@
             <ion-footer-bar style="height:115px !important;">
               <div class="" style="width: 100%;">
                   <button style="" ng-click="addItemToGroup()" class="list button bar-footer button-full button-calm">Add New</button>
-                  <button style="" ng-click="setItemInfo()" ng-disabled="form.$invalid || !thisGroup.department" class="list button bar-footer button-full button-balanced">Push Update</button>
+                  <button style="" ng-click="setItemInfo()" ng-disabled="form.$invalid || !thisGroup.MerchandiseCodeDetails" class="list button bar-footer button-full button-balanced">Push Update</button>
               </div>
             </ion-footer-bar>
         </ion-tab>

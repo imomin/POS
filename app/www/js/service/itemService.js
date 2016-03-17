@@ -21,10 +21,20 @@ angular.module('pricecheck')
 		   }, 	
 		   	get:function(){
 		   		var defer = $q.defer();
-					$http.get(serverAddr + '/api/items').then(function(response){
+					$http.get(serverAddr + '/api/items/group/').then(function(response){
 				  items = response.data;
 				  defer.resolve(items);
 				  socket.syncUpdates('item', items);
+				}, function (err) {
+
+				});
+   				return defer.promise;
+   			},
+			getByItemId:function(itemId){
+		   		var defer = $q.defer();
+					$http.get(serverAddr + '/api/items/group/' + itemId).then(function(response){
+					  var item = response.data;
+					  defer.resolve(item);
 				}, function (err) {
 
 				});

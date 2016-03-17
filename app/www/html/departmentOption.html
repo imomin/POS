@@ -10,7 +10,7 @@
         <ion-scroll direction="y" style="height:90vh;">
             <ion-list>
               <ion-item item="department" ng-click="selectedDepartment(department);" ng-repeat="department in departments  track by department._id" ng-model="thisGroup.department">
-                {{department.merchandiseCodeDescription}}
+                {{department.MerchandiseCodeDescription}}
                 <i class="icon ion-checkmark option-list-icon" ng-show="department._id == thisGroup.department._id"></i>
               </ion-item>
               <!-- <ion-radio ng-change="closeModal('deptOption');" ng-repeat="department in departments  track by department._id" ng-value="department"  ng-model="thisGroup.department">{{department.merchandiseCodeDescription}}</ion-radio> -->

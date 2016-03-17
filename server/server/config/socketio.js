@@ -17,6 +17,7 @@ function onConnect(socket) {
   });
 
   // Insert sockets below
+  require('../api/ittdata/ittdata.socket').register(socket);
   require('../api/merchandisecode/merchandisecode.socket').register(socket);
   require('../api/discount/discount.socket').register(socket);
   require('../api/tax/tax.socket').register(socket);

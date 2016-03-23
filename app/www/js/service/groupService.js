@@ -3,17 +3,25 @@
 angular.module('pricecheck')
 	.factory('GroupServ', function($q, $http, $cookies, socket, serverAddr) {
 		var groups = [];
-		var _tempScannedItems = [];
+		var _groupItems = [];
 		return {
 			 set:function(group) {
 			 	var defer = $q.defer();
 			 	if(group._id){
 			 		$http.put(serverAddr + '/api/ittdata/'+group._id, group).then(function(response){
 			 			defer.resolve(response);
+						angular.forEach(groups, function(value, key){
+							if(group._id === value._id){
+								groups[key] = response.data;
+								defer.resolve(groups[key]);
+							}
+						});
 			 		});
 			 	}
 			 	else {
 			 		$http.post(serverAddr + '/api/ittdata/', group).then(function(response){
+			 			debugger;
+			 			groups.push(response.data);
 			 			defer.resolve(response);
 			 		});
 			 	}
@@ -23,6 +31,7 @@ angular.module('pricecheck')
 		   		var defer = $q.defer();
 					$http.get(serverAddr + '/api/ittdata/').then(function(response){
 					  groups = response.data;
+					  _groupItems = response.data.Items ? response.data.Items : [];
 					  defer.resolve(groups);
 					  socket.syncUpdates('group', groups);
 				}, function (err) {
@@ -41,16 +50,28 @@ angular.module('pricecheck')
    				return defer.promise;
    			},
    			remove:function(_id){
-   				$http.delete(serverAddr + '/api/items/' + _id);
+   				var defer = $q.defer();
+   				$http.delete(serverAddr + '/api/ittdata/' + _id).then(function(response){
+   					angular.forEach(groups, function(group, key){
+						if(_id === group._id){
+							groups.splice(key, 1);
+							defer.resolve(groups);
+						}
+					});
+   					defer.resolve(response);
+   				}, function (err) {
+					defer.reject(err);
+				});
+   				return defer.promise;
    			},
    			addScannedItem:function(item){
-   				return _tempScannedItems.push(item);
+   				return _groupItems.push(item);
    			},
    			getScannedItems:function(){
-   				return _tempScannedItems;
+   				return _groupItems;
    			},
    			clearScannedItem:function(){
-   				return _tempScannedItems = [];
+   				return _groupItems = [];
    			}
 		};
 	});

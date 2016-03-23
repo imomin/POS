@@ -9,9 +9,6 @@ angular.module('pricecheck')
         var deviceId = "811536972167970e";
       }
       AuthServ.isServerAvailabel().then(function(response){
-        console.log('*********');
-        console.log(response);
-        console.log('*********');
         if(response.data.count === -1){
           var alertPopup = $ionicPopup.alert({
             title: 'Connection Error',

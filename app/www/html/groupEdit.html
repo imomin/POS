@@ -47,7 +47,7 @@
 
                   <button ng-show="!thisGroup._id" style="" ng-click="closeModal('editGroup')" class="list button bar-footer button-full button-assertive">Cancel</button>
               
-                  <button style="" ng-click="setItemInfo()" ng-disabled="form.$invalid || !thisGroup.MerchandiseCodeDetails" class="list button bar-footer button-full button-balanced">Push Update</button>
+                  <button style="" ng-click="save()" ng-disabled="form.$invalid || !thisGroup.MerchandiseCodeDetails" class="list button bar-footer button-full button-balanced">Push Update</button>
               </div>
           </ion-footer-bar>
        </ion-tab>
@@ -70,7 +70,7 @@
             <ion-footer-bar style="height:115px !important;">
               <div class="" style="width: 100%;">
                   <button style="" ng-click="addItemToGroup()" class="list button bar-footer button-full button-calm">Add New</button>
-                  <button style="" ng-click="setItemInfo()" ng-disabled="form.$invalid || !thisGroup.MerchandiseCodeDetails" class="list button bar-footer button-full button-balanced">Push Update</button>
+                  <button style="" ng-click="save()" ng-disabled="form.$invalid || !thisGroup.MerchandiseCodeDetails" class="list button bar-footer button-full button-balanced">Push Update</button>
               </div>
             </ion-footer-bar>
         </ion-tab>

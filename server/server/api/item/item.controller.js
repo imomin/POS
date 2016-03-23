@@ -130,7 +130,7 @@ export function destroy(req, res) {
 
 export function lookup(req, res) {
   var barcode = req.params.barcode;
-  Item.findOneAsync({'items.posCode': {$eq: barcode}})
+  Item.findOneAsync({'ItemCode.POSCode': {$eq: barcode}})
     .then(item => {
       if (!item) {
         return res.status(404).end();

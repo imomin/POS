@@ -1,12 +1,22 @@
 'use strict';
 
 angular.module('pricecheck')
-.controller('GroupCtrl', function($scope, $timeout, $ionicModal, $ionicPopup, $ionicPlatform, $cordovaBarcodeScanner, $ionicListDelegate, $ionicTabsDelegate, GroupServ, ItemServ) {
+.controller('GroupCtrl', function($scope, $timeout, $ionicModal, $ionicPopup, $ionicLoading, $ionicPlatform, $cordovaBarcodeScanner, $ionicListDelegate, $ionicTabsDelegate, GroupServ, ItemServ) {
 	$scope.groups = [];
 	$scope.defaultValues = {};
-	GroupServ.get().then(function(data){
+	GroupServ.get().then(function(data) {
 		$scope.groups = data;
+		$scope.doneLoading();
 	});
+
+	$scope.loading = function() {
+		$ionicLoading.show({
+			template: '<ion-spinner icon="lines" class="loading"></ion-spinner>'
+		});
+	};
+	$scope.doneLoading = function(){
+		$ionicLoading.hide();
+	};
 
 	$scope.addNewGroup = function(){
 	  $scope.thisGroup = {"items":[],"MerchandiseCode":null,"RegularSellPrice":null,"Description":"","TaxStrategyID":null,"DepartmentKeyAtPOS":1,"DiscountableFlg":{"@":{"value":"yes"}},"FoodStampableFlg":{"@":{"value":"no"}},"PaymentSystemsProductCode":400,"ActiveFlag":{"@":{"value":"yes"}},"QuantityRequiredFlg":{"@":{"value":"no"}},"QuantityAllowedFlg":{"@":{"value":"yes"}},"PriceRequiredFlg":{"@":{"value":"no"}},"ItemType":{"ItemTypeSubCode":"mdse","ItemTypeCode":"mdse"},"SalesRestriction":{"MinimumCustomerAge":0},"SellingUnits":1,"PricingGroup":0};
@@ -35,6 +45,7 @@ angular.module('pricecheck')
 	}
 
 	$scope.showDetails = function(group){
+		$scope.loading();
 		GroupServ.getById(group._id).then(function(res){
 			$scope.thisGroup = res;
 			$ionicModal.fromTemplateUrl('html/groupEdit.html', {
@@ -48,6 +59,7 @@ angular.module('pricecheck')
 					$ionicTabsDelegate.select(1);
 				}
 			});
+			$scope.doneLoading();
 		});
 	}
 
@@ -70,6 +82,7 @@ angular.module('pricecheck')
 	}
 
 	$scope.save = function(){
+		$scope.loading();
 		//append new item to the group's item array.
 		GroupServ.set($scope.thisGroup).then(function(response){
 			// debugger;
@@ -85,6 +98,7 @@ angular.module('pricecheck')
 			$scope.scanData = null;
 			$scope.itemScanned = false;
 			$scope.itemFound = false;
+			$scope.doneLoading();
 			$scope.closeModal('editGroup');
 		});
 	}

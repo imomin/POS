@@ -30,10 +30,10 @@ angular.module('pricecheck')
 		   	get:function(){
 		   		var defer = $q.defer();
 					$http.get(serverAddr + '/api/ittdata/').then(function(response){
-					  groups = response.data;
-					  _groupItems = response.data.Items ? response.data.Items : [];
-					  defer.resolve(groups);
-					  socket.syncUpdates('group', groups);
+						groups = response.data;
+						_groupItems = response.data.Items ? response.data.Items : [];
+						defer.resolve(groups);
+						socket.syncUpdates('group', groups);
 				}, function (err) {
 
 				});

@@ -1,14 +1,25 @@
 'use strict';
 
 angular.module('pricecheck')
-.controller('DeptCtrl', function($scope, $timeout, $ionicModal, $ionicPopup, DepartmentServ) {
+.controller('DeptCtrl', function($scope, $timeout, $ionicModal, $ionicLoading, $ionicPopup, DepartmentServ) {
 	DepartmentServ.get().then(function(data){
 		$scope.departments = data;
+		$scope.doneLoading();
 	});
+
 	$scope.thisDept = {'taxStrategyID':101};
 	$scope.openModal = function() {
 		$scope.modal.show();
 	}
+
+	$scope.loading = function() {
+		$ionicLoading.show({
+			template: '<ion-spinner icon="lines" class="loading"></ion-spinner>'
+		});
+	};
+	$scope.doneLoading = function(){
+		$ionicLoading.hide();
+	};
 
 	$scope.closeModal = function(id) {
 		$scope.thisDept = {'taxStrategyID':101};
@@ -21,9 +32,11 @@ angular.module('pricecheck')
 	});
 
 	$scope.updateDept = function(){
+		$scope.loading();
 		DepartmentServ.set($scope.thisDept).then(function(res){
 			$scope.thisDept = {'taxStrategyID':101};
 			$scope.closeModal('editDept');
+			$scope.doneLoading();
 		},function(err){
 			console.log(err);
 			if(err.data.code === "ENOENT"){
@@ -35,6 +48,7 @@ angular.module('pricecheck')
 				     
 				   });
 			}
+			$scope.doneLoading();
 		});
 	}
 

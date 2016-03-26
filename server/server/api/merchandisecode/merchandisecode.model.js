@@ -1,6 +1,10 @@
 'use strict';
 
 var mongoose = require('bluebird').promisifyAll(require('mongoose'));
+var counter = require('./../counter/counter.model');
+var Promise = require('promise');
+var fs = require('fs');
+import config from '../../config/environment';
 
 var MerchandisecodeSchema = new mongoose.Schema({
 	MerchandiseCode: {type:Number, unique: true, require: true},
@@ -22,6 +26,13 @@ var MerchandisecodeSchema = new mongoose.Schema({
 	}
 });
 
+MerchandisecodeSchema.methods = {
+  getNextId(callback) {
+   	counter.findByIdAndUpdate({_id: 'departmentMerchandiseCode'}, {$inc: { seq: 1} }, function(error, counter)   {
+    	callback(error,counter);
+	});
+  }
+}
 export default mongoose.model('Merchandisecode', MerchandisecodeSchema);
 
 

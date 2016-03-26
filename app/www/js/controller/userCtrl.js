@@ -1,9 +1,10 @@
 'use strict';
 
 angular.module('pricecheck')
-.controller('UserCtrl', function($scope, $timeout, $ionicModal, $ionicPopup, UserServ) {
+.controller('UserCtrl', function($scope, $timeout, $ionicModal, $ionicLoading, $ionicPopup, UserServ) {
 	UserServ.get().then(function(data){
 		$scope.users = data;
+		$scope.doneLoading();
 	});
 	$scope.thisUser = {};
 
@@ -16,14 +17,26 @@ angular.module('pricecheck')
 		$scope.modal.hide();
 	}
 
+	$scope.loading = function() {
+		$ionicLoading.show({
+			template: '<ion-spinner icon="lines" class="loading"></ion-spinner>'
+		});
+	};
+
+	$scope.doneLoading = function(){
+		$ionicLoading.hide();
+	};
+
 	$scope.$on('$destroy', function() {
 		$scope.modal.remove();
 		UserServ.distroySync();
 	});
 
 	$scope.updateUser = function(){
-		//$scope.users = 
-		UserServ.set($scope.thisUser);
+		$scope.loading();
+		UserServ.set($scope.thisUser).then(user => {
+			$scope.doneLoading()
+		});
 		$scope.thisUser = {};
 		$scope.closeModal('editUser');
 	}

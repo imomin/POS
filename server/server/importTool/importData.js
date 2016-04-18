@@ -6,6 +6,7 @@ var fs = require('fs');
 var xml2js = require('xml2js');
 var parser = new xml2js.Parser({explicitArray:false,attrkey:'$'});
 var builder = new xml2js.Builder();
+var Promise = require('promise');
 var fileDir = __dirname + '/../../../PassportDataMaintenance.xml';
 var mongoose = require('bluebird').promisifyAll(require('mongoose'));
 import Store from '../api/store/store.model';
@@ -22,20 +23,47 @@ String.prototype.replaceAll = function (find, replace) {
     var str = this;
     return str.replace(new RegExp(find.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&'), 'g'), replace);
 };
-readData(function(err, jsonData){
-	if(err) {
-		console.log(err);
-		process.exit(-1);
-	}
-	data = jsonData;
-	loadStoreInfo();
-	loadTaxInfo();
-	loadDiscountInfo();
-	loadMerchandiseCodes(function(){
-		console.log("done loading merchandisecode");
-		loadGroup();
+
+
+export function init(){
+  return new Promise(function (resolve, reject) {
+  	console.log("test1");
+  	readData(fileDir, function(err, jsonData){
+		if(err) {
+			console.log("error1");
+			reject(err);
+		}
+		console.log("test2");
+		data = jsonData;
+		console.log(data);
+		loadStoreInfo();
+		loadTaxInfo();
+		loadDiscountInfo();
+		loadMerchandiseCodes(function() {
+			console.log("test3");
+			console.log("done loading merchandisecode");
+			loadGroup(function(){
+				console.log("test4");
+				resolve({'done':true});
+			});
+		});
 	});
-});
+  });
+}
+// readData(function(err, jsonData){
+// 	if(err) {
+// 		console.log(err);
+// 		process.exit(-1);
+// 	}
+// 	data = jsonData;
+// 	loadStoreInfo();
+// 	loadTaxInfo();
+// 	loadDiscountInfo();
+// 	loadMerchandiseCodes(function(){
+// 		console.log("done loading merchandisecode");
+// 		loadGroup();
+// 	});
+// });
 
 function getNextSequence(name) {
    var ret = Counter.findAndModify(
@@ -48,7 +76,8 @@ function getNextSequence(name) {
    return ret.seq;
 }
 
-function readData(callback){
+function readData(file, callback){
+	console.log("test1-1");
 	fs.readFile(fileDir, function(err, data) {
 	    parser.parseString(data, callback);
 	})
@@ -155,7 +184,7 @@ function loadGroup(callback){
 							counter=counter+1;
 							//console.log(counter +' = '+ _.size(trackGroups));
 							if(_.size(trackGroups) === counter){
-								loadItems()
+								loadItems(callback)
 							}
 						})
 						.catch(err => {
@@ -171,8 +200,10 @@ function loadGroup(callback){
 }
 
 
-function loadItems(){
+function loadItems(callback){
 	var itemDetails = data.PassportDataMaintenance.ItemMaintenance.ITTDetail;
+	var counter = 0;
+
  	Item.find({}).removeAsync().then(() => {
 		_.forEach(itemDetails,function(itemMaintenance, index){
 			// itemMaintenance.department = mongoose.Types.ObjectId(trackGroups[itemMaintenance.ITTData.ItemID].departmentId);
@@ -180,6 +211,7 @@ function loadItems(){
 			// itemMaintenance.ITTData.RegularSellPrice = trackGroups[itemMaintenance.ITTData.ItemID].RegularSellPrice;
 			// itemMaintenance.ITTData.Description = trackGroups[itemMaintenance.ITTData.ItemID].Description;
 			// itemMaintenance.ITTData.ItemID = trackGroups[itemMaintenance.ITTData.ItemID].ItemID;
+			counter=counter+1;
 			if(trackGroups[itemMaintenance.ITTData.ItemID]){
 				itemMaintenance.ITTData = mongoose.Types.ObjectId(trackGroups[itemMaintenance.ITTData.ItemID].id);
 				var temp = JSON.stringify(itemMaintenance).replaceAll('"$":','"@":');
@@ -196,6 +228,9 @@ function loadItems(){
 					console.log(err);
 					setTimeout(function(){process.exit(-1)},100);
 				});
+			}
+			if(_.size(itemDetails) === counter){
+				callback();
 			}
 		});
 	});

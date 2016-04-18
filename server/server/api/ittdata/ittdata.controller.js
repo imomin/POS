@@ -30,7 +30,6 @@ function handleError(res, statusCode) {
 function responseWithResult(res, statusCode) {
   statusCode = statusCode || 200;
   return function(entity) {
-    console.log('test1');
     if (entity) {
       res.status(statusCode).json(entity);
     }
@@ -145,6 +144,7 @@ function addItems(data) {
                 )
             }
             else {
+              console.log(itemData);
               //Add all new records from the collection
               itemData.RecordAction["@"].type = "create";
               Item.createAsync(itemData).then(invItems => {
@@ -155,11 +155,16 @@ function addItems(data) {
             i++;
           }
           else {
-              generateXML(entity,totalItems).then(res => {
-                  return resolve(entity);
-              }).catch(err => {
-                  return reject(err);
-              });
+              if(totalItems.length > 0){//generate xml if there are items with recordActions.
+                generateXML(entity,totalItems).then(res => {
+                    return resolve(entity);
+                }).catch(err => {
+                    return reject(err);
+                });
+              }
+              else {
+                return resolve(entity); 
+              }
           }
         }());
       });

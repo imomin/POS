@@ -11,6 +11,7 @@
 
 import _ from 'lodash';
 var Item = require('./item.model');
+var ittData = require('./../ittdata/ittdata.model');
 
 function handleError(res, statusCode) {
   statusCode = statusCode || 500;
@@ -29,10 +30,31 @@ function responseWithResult(res, statusCode) {
 }
 
 
-function populateDepartment(){
+function populateITTData(){
   return function(entity){
     if (entity) {
-      return entity.populateAsync('department')
+      console.log('populate item.');
+      console.log(entity.ITTData._id);
+      return entity.populateAsync('ITTData')
+    };
+  }
+}
+
+function populateITTDataMerchandiseCodeDetail(){
+  return function(entity){
+    if (entity) {
+      return entity.populateAsync('MerchandiseCodeDetails')
+    };
+  }
+}
+
+function populateItemCodes(){
+  return function(entity){
+    if (entity) {
+      return Item.findAsync({'ITTData':entity._id}).then(invItems => {
+          entity.set('items',invItems, { strict: false });
+          return entity;
+      });
     };
   }
 }
@@ -88,7 +110,7 @@ export function index(req, res) {
 export function show(req, res) {
   Item.findByIdAsync(req.params.id)
     .then(handleEntityNotFound(res))
-    .then(populateDepartment())
+    .then(populateITTData())
     .then(responseWithResult(res))
     .catch(handleError(res));
 }
@@ -113,7 +135,7 @@ export function update(req, res) {
   Item.findByIdAsync(req.params.id)
     .then(handleEntityNotFound(res))
     .then(saveUpdates(req.body))
-    .then(populateDepartment())
+    .then(populateITTData())
     .then(generateXMLFile('addchange'))
     .then(responseWithResult(res))
     .catch(handleError(res));
@@ -130,49 +152,18 @@ export function destroy(req, res) {
 
 export function lookup(req, res) {
   var barcode = req.params.barcode;
-  Item.findOneAsync({'ItemCode.POSCode': {$eq: barcode}})
-    .then(item => {
-      if (!item) {
-        return res.status(404).end();
-      }
-      item.populateAsync('department')
-      .then(function(result){
-        res.status(200).json(result);
-      })
-    })
-    .catch(err => next(err));
-}
-
-// Gets a list of Merchandisecodes group by name and itemId
-export function group(req, res) {
-    Item.aggregateAsync([
-        {$group:{"_id":{ItemID: "$ITTData.ItemID", Description: "$ITTData.Description"}}},
-        {$sort:{"_id.Description":1}}
-      ])
-    .then(responseWithResult(res))
-    .catch(handleError(res));
-}
-
-// Gets a list of Merchandisecodes by itemId
-export function groupByItemId(req, res) {
-  Item.findAsync({'ITTData.ItemID':req.params.itemid})
-    .then(handleEntityNotFound(res))
-    .then(data => {
-      var itemData = [];
-      var counter = 0;
-      _.forEach(data, function(value, key){
-        data[key].populateAsync('department')
-        .then(extendedData => {
-          itemData.push(extendedData);
-          counter = counter + 1;
-          if(counter === data.length){
-            res.status(200).json(itemData);
-          }
-        })
+  Item.findAsync({'ItemCode.POSCode':barcode})
+      .then(item => {
+        if (!item) {
+          return res.status(404).end();
+        }
+        console.log(item);
+        ittData.findAsync({'_id':{ $in :[item.ITTData]}})
+        .then(handleEntityNotFound(res))
+        .then(populateITTDataMerchandiseCodeDetail())
+        .then(populateItemCodes())
+        .then(responseWithResult(res))
         .catch(handleError(res));
-        console.log(data[key]);
-      })
     })
-    //.then(responseWithResult(res))
     .catch(handleError(res));
 }

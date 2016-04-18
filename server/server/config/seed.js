@@ -5,6 +5,7 @@
 
 'use strict';
 import Counter from '../api/counter/counter.model';
+import User from '../api/user/user.model';
 
 Counter.count({})
   .then(count => {
@@ -25,3 +26,16 @@ Counter.count({})
     }
   })
   .catch(err => next(err));
+
+  User.find({}).removeAsync()
+  .then(() => {
+      User.createAsync({
+        name: 'iastute',
+        role: 'admin',
+        email: 'imomin@gmail.com',
+        password:'Admin?'
+    })
+    .then(() => {
+      console.log('finished populating employees');
+    });
+  });

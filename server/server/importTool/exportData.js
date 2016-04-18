@@ -17,7 +17,9 @@ String.prototype.replaceAll = function (find, replace) {
     return str.replace(new RegExp(find.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&'), 'g'), replace);
 };
 
-var data = {'PassportDataMaintenance':{
+export function init(){
+	return new Promise(function (resolve, reject) {
+		var data = {'PassportDataMaintenance':{
 			'Header':{},
 			'TaxMaintenance':{'PSTCaccadedOnGST': 'False','TaxMaintenanceDetail':{}},
 			'DiscountMaintenance':{},
@@ -25,45 +27,49 @@ var data = {'PassportDataMaintenance':{
 			'ItemMaintenance': {'TableAction':{'$':{'type': 'initialize'}},'RecordAction':{'$':{'type':'addchange'}},'ITTDetail':[]}
 		}};
 
-	Store.findAsync({},'-_id -__v')
-    	.then(storeInfo => {
-    		data.PassportDataMaintenance.Header = storeInfo[0];
-    		Tax.findAsync({},'-_id -__v')
-    			.then(taxInfo => {
-    				data.PassportDataMaintenance.TaxMaintenance.TaxMaintenanceDetail = taxInfo;
-					MerchandiseCode.findAsync({},'-_id -__v')
-						.then(departments => {
-							data.PassportDataMaintenance.MerchandiseCodeMaintenance.MCTDetail = departments;
-							Item.findAsync({},'-_id -__v -department')
+		Store.findAsync({},'-_id -__v')
+	    	.then(storeInfo => {
+	    		data.PassportDataMaintenance.Header = storeInfo[0];
+	    		Tax.findAsync({},'-_id -__v')
+	    			.then(taxInfo => {
+	    				data.PassportDataMaintenance.TaxMaintenance.TaxMaintenanceDetail = taxInfo;
+						MerchandiseCode.findAsync({},'-_id -__v')
+							.then(departments => {
+								data.PassportDataMaintenance.MerchandiseCodeMaintenance.MCTDetail = departments;
+								Item.find({},'-_id -__v -department')
+								.populate('ITTData','-_id -__v -MerchandiseCodeDetails')
+								.execAsync()
 								.then(items => {
 									data.PassportDataMaintenance.ItemMaintenance.ITTDetail = items;
-									json2xml(data);
+									var xml = json2xml(data);
+									resolve(xml);
 								})
 								.catch(function(err){
-							    	console.log(err);
-							    	console.log("Error getting MerchandiseCode data.");
-							    });
-						})
-						.catch(function(err){
-					    	console.log(err);
-					    	console.log("Error getting MerchandiseCode data.");
-					    });
-    			})
-    			.catch(function(err){
-			    	console.log(err);
-			    	console.log("Error getting Tax data.");
-			    });
-    	})
-    .catch(function(err){
-    	console.log(err);
-    	console.log("Error getting Store data.");
-    });
-
+									err.logMessage = "Error getting ItemMaintenance data.";
+									reject(err);
+								});
+							})
+							.catch(function(err){
+								console.log(err);
+								err.logMessage = "Error getting MerchandiseCode data.";
+						    	reject(err);
+						    });
+	    			})
+	    			.catch(function(err){
+	    				err.logMessage = "Error getting Tax data.";
+				    	reject(err);
+				    });
+	    	})
+	    .catch(function(err){
+	    	err.logMessage = "Error getting Store data.";
+	    	reject(err);
+	    });
+	});
+}
 
 function json2xml(data){
-	console.log(JSON.stringify(data));
+	//console.log(JSON.stringify(data));
 	var temp = JSON.stringify(data).replaceAll('"@":','"$":');
 	data = JSON.parse(temp);
-	var xml = builder.buildObject(data);
-	console.log(xml);
+	return builder.buildObject(data);
 }

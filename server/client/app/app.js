@@ -9,7 +9,8 @@ angular.module('serverApp', [
   'ngSanitize',
   'btford.socket-io',
   'ui.router',
-  'validation.match'
+  'validation.match',
+  'angularFileUpload'
 ])
   .config(function($urlRouterProvider, $locationProvider) {
     $urlRouterProvider
